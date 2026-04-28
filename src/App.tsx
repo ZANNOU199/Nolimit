@@ -18,7 +18,7 @@ import {
 import { useState, useEffect } from 'react';
 
 const IMAGES = {
-  logo: "https://i.ibb.co/qMzPrr5Q/NO-LIMIT-CREW-logo-transparent.png",
+  logo: "https://i.ibb.co/gFPmjbyS/Copie-de-LOGO-NO-LIMIT-CREW-ASSOCIATION-removebg-preview.png",
   hero: "https://i.ibb.co/Rps321Pt/78-A0328-resultat-resultat-resultat.webp",
   elena: "https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=1974&auto=format&fit=crop",
   marcus: "https://images.unsplash.com/photo-1502444330042-d1a1ddf9bb5b?q=80&w=2073&auto=format&fit=crop",
