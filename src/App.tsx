@@ -33,8 +33,11 @@ export default function App() {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      setScrollY(window.scrollY || window.pageYOffset || document.documentElement.scrollTop);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initialize
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -85,16 +88,12 @@ export default function App() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              <h2 className="text-xs md:text-sm font-black tracking-[0.4em] uppercase text-primary mb-6">
-                Énergie Pure. Savoir-faire Élite.
-              </h2>
-              
               <div className="relative -ml-6 -mr-6 md:-ml-20 md:-mr-20 overflow-hidden bg-accent-yellow/20 backdrop-blur-md py-4 border-y border-white/20 rotate-[-1deg]">
                 <div className="flex whitespace-nowrap animate-marquee">
                   {[...Array(4)].map((_, i) => (
                     <span key={i} className="text-white text-[clamp(2rem,5vw,3.5rem)] font-black uppercase tracking-tighter mx-8 flex items-center gap-8">
-                      No Limit Crew <span className="w-5 h-5 bg-primary rotate-45 shrink-0" />
-                      No Limit Crew <span className="w-5 h-5 bg-primary rotate-45 shrink-0" />
+                      No Limit Crew <span className="w-5 h-5 bg-accent-yellow rotate-45 shrink-0" />
+                      No Limit Crew <span className="w-5 h-5 bg-accent-yellow rotate-45 shrink-0" />
                     </span>
                   ))}
                 </div>
@@ -390,25 +389,34 @@ export default function App() {
       </footer>
 
       {/* Mobile Nav */}
-      <nav className="md:hidden fixed bottom-6 left-6 right-6 h-20 bg-surface border-2 border-on-surface shadow-[10px_10px_0px_rgba(0,0,0,0.1)] z-[90] rounded-none flex items-center justify-around px-2">
-        {[
-          { icon: Theater, label: "Dates", id: "événements" },
-          { icon: Users, label: "Crew", id: "lacompagnie" },
-          { icon: Dumbbell, label: "Booking", id: "contact" },
-          { icon: Library, label: "Media", id: "archives" }
-        ].map((item, i) => (
-          <button 
-            key={i}
-            onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })}
-            className="flex flex-col items-center gap-1 group flex-1"
+      <AnimatePresence>
+        {scrollY > 100 && (
+          <motion.nav 
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            className="md:hidden fixed bottom-6 left-6 right-6 h-20 bg-surface border-2 border-on-surface shadow-[10px_10px_0px_rgba(0,0,0,0.1)] z-[90] rounded-none flex items-center justify-around px-2"
           >
-            <div className="p-2 transition-all">
-              <item.icon size={20} className="group-hover:text-primary transition-all" />
-            </div>
-            <span className="text-[7px] font-black uppercase tracking-[0.2em]">{item.label}</span>
-          </button>
-        ))}
-      </nav>
+            {[
+              { icon: Theater, label: "Dates", id: "événements" },
+              { icon: Users, label: "Crew", id: "lacompagnie" },
+              { icon: Dumbbell, label: "Booking", id: "contact" },
+              { icon: Library, label: "Media", id: "archives" }
+            ].map((item, i) => (
+              <button 
+                key={i}
+                onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })}
+                className="flex flex-col items-center gap-1 group flex-1"
+              >
+                <div className="p-2 transition-all">
+                  <item.icon size={20} className="group-hover:text-primary transition-all" />
+                </div>
+                <span className="text-[7px] font-black uppercase tracking-[0.2em]">{item.label}</span>
+              </button>
+            ))}
+          </motion.nav>
+        )}
+      </AnimatePresence>
 
       {/* Overlay Menu */}
       <AnimatePresence>
