@@ -5,21 +5,38 @@
   --font-sans: "Epilogue", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Epilogue", ui-sans-serif, system-ui, sans-serif;
   
-  --color-primary: #aa3000;
+  --color-brand-orange: #E8511A;
+  --color-brand-green: #1E9E4A;
+  --color-brand-yellow: #F5A800;
+  --color-primary: var(--color-brand-orange);
   --color-surface: #ffffff;
-  --color-surface-alt: #f4f4f0;
+  --color-surface-alt: #f8f8f5;
   --color-on-surface: #1e1b19;
   --color-on-surface-muted: #59413a;
-  --color-accent-orange: #ffe8e0;
-  --color-accent-green: #e8f4e8;
-  --color-accent-yellow: #fff9e0;
+  
+  --color-accent-orange: #fff4f0;
+  --color-accent-green: #f0f7f0;
+  --color-accent-yellow: #fffdf5;
 
-  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-fast: marquee 20s linear infinite;
 
   @keyframes marquee {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
+}
+
+@utility glass-dark {
+  background: rgba(18, 16, 14, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@utility glass-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 @layer base {
