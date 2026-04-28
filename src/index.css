@@ -48,19 +48,7 @@
     position: relative;
   }
   
-  /* Subtle grain texture */
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-    opacity: 0.05;
-    pointer-events: none;
-    z-index: 9999;
-  }
+  /* Texture de grain désactivée pour préserver la netteté du logo */
 }
 
 @layer utilities {

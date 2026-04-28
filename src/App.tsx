@@ -50,7 +50,8 @@ export default function App() {
             <img 
               src={IMAGES.logo} 
               alt="No Limit Crew Logo" 
-              className={`h-full w-auto object-contain transition-all duration-500 ${scrollY > 50 ? 'scale-90' : 'scale-100'}`}
+              className={`h-full w-auto object-contain transition-all duration-500 transform-gpu ${scrollY > 50 ? 'scale-90' : 'scale-100'}`}
+              style={{ imageRendering: 'auto' }}
               referrerPolicy="no-referrer"
             />
           </div>
@@ -380,11 +381,16 @@ export default function App() {
 
       {/* Footer */}
       <footer className="bg-on-surface text-white py-32 px-6 relative overflow-hidden border-t border-on-surface/5">
-        <div className="absolute top-0 left-0 w-full h-full bg-noise opacity-[0.03] pointer-events-none" />
         <div className="max-w-screen-2xl mx-auto space-y-32">
           <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-20">
             <div className="space-y-10 text-center md:text-left">
-              <img src={IMAGES.logo} alt="NLC Logo" className="h-16 w-auto grayscale invert brightness-200 mx-auto md:mx-0" referrerPolicy="no-referrer" />
+              <img 
+                src={IMAGES.logo} 
+                alt="NLC Logo" 
+                className="h-20 w-auto mx-auto md:mx-0 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]" 
+                style={{ imageRendering: 'auto' }}
+                referrerPolicy="no-referrer" 
+              />
               <p className="text-xs uppercase tracking-[0.6em] text-white/30 font-black">Energy. Elite. Evolution.</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-32">
