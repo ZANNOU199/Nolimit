@@ -85,12 +85,20 @@ export default function App() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              <h2 className="text-xs md:text-sm font-black tracking-[0.4em] uppercase text-primary mb-4">
+              <h2 className="text-xs md:text-sm font-black tracking-[0.4em] uppercase text-primary mb-6">
                 Énergie Pure. Savoir-faire Élite.
               </h2>
-              <h1 className="text-[clamp(18vw,8rem,15vw)] font-black text-white leading-[0.85] tracking-[-0.04em] uppercase whitespace-pre-line text-balance drop-shadow-2xl">
-                No Limit{"\n"}Crew
-              </h1>
+              
+              <div className="relative -ml-6 -mr-6 md:-ml-20 md:-mr-20 overflow-hidden bg-accent-yellow/20 backdrop-blur-md py-4 border-y border-white/20 rotate-[-1deg]">
+                <div className="flex whitespace-nowrap animate-marquee">
+                  {[...Array(4)].map((_, i) => (
+                    <span key={i} className="text-white text-[clamp(2rem,5vw,3.5rem)] font-black uppercase tracking-tighter mx-8 flex items-center gap-8">
+                      No Limit Crew <span className="w-5 h-5 bg-primary rotate-45 shrink-0" />
+                      No Limit Crew <span className="w-5 h-5 bg-primary rotate-45 shrink-0" />
+                    </span>
+                  ))}
+                </div>
+              </div>
             </motion.div>
 
             <div className="flex flex-col sm:flex-row gap-5">
@@ -119,19 +127,6 @@ export default function App() {
             </div>
           </div>
         </section>
-
-        {/* Marquee Section */}
-        <div className="bg-primary py-4 overflow-hidden border-y-2 border-on-surface">
-          <div className="flex whitespace-nowrap animate-marquee">
-            {[...Array(6)].map((_, i) => (
-              <span key={i} className="text-white text-5xl md:text-7xl font-black uppercase tracking-tighter mx-8 flex items-center gap-8">
-                No Limit Crew <span className="w-4 h-4 md:w-6 md:h-6 bg-white shrink-0 rotate-45" />
-                Énergie Pure <span className="w-4 h-4 md:w-6 md:h-6 bg-white shrink-0 rotate-45" />
-                Elite Craft <span className="w-4 h-4 md:w-6 md:h-6 bg-white shrink-0 rotate-45" />
-              </span>
-            ))}
-          </div>
-        </div>
 
         {/* Stats Grid */}
         <section className="bg-on-surface text-surface py-32 px-6">
