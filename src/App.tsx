@@ -68,8 +68,7 @@ export default function App() {
               alt="No Limit Crew Logo" 
               className={`h-full w-auto object-contain transition-all duration-700 transform-gpu ${scrollY > 50 ? 'scale-90 opacity-100' : 'scale-100'}`}
               style={{ 
-                imageRendering: 'auto',
-                filter: scrollY > 50 || isHeroActive ? 'none' : 'grayscale(1) brightness(2)'
+                imageRendering: 'auto'
               }}
               referrerPolicy="no-referrer"
             />
