@@ -126,7 +126,7 @@ export default function App() {
           <div className={`absolute inset-0 bg-gradient-to-tr from-on-surface via-transparent to-transparent transition-opacity duration-1000 ${scrollY > 50 || isHeroActive ? 'opacity-40' : 'opacity-80'}`} />
 
           <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-center pb-8 sm:pb-16 px-6 md:px-12 max-w-screen-2xl mx-auto">
-            <div className="space-y-10 max-w-4xl mt-20">
+            <div className="space-y-10 max-w-4xl mt-32 md:mt-40">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
