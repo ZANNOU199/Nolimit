@@ -31,6 +31,20 @@ const IMAGES = {
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [isHeroActive, setIsHeroActive] = useState(false);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    const resetHero = () => {
+      timeout = setTimeout(() => setIsHeroActive(false), 3000);
+    };
+
+    if (isHeroActive) {
+      resetHero();
+    }
+
+    return () => clearTimeout(timeout);
+  }, [isHeroActive]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,14 +58,19 @@ export default function App() {
   return (
     <div className="min-h-screen bg-surface selection:bg-brand-orange selection:text-white">
       {/* Top Bar */}
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrollY > 50 ? 'h-16 bg-surface/90 glass-light' : 'h-24 bg-transparent'}`}>
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${scrollY > 50 ? 'h-16 bg-surface/90 glass-light' : 'h-24 bg-transparent'}`}
+      >
         <div className="max-w-screen-2xl mx-auto h-full px-6 md:px-12 flex items-center justify-between">
           <div className="h-full py-4 transition-all duration-500">
             <img 
               src={IMAGES.logo} 
               alt="No Limit Crew Logo" 
-              className={`h-full w-auto object-contain transition-all duration-500 transform-gpu ${scrollY > 50 ? 'scale-90' : 'scale-100'}`}
-              style={{ imageRendering: 'auto' }}
+              className={`h-full w-auto object-contain transition-all duration-700 transform-gpu ${scrollY > 50 ? 'scale-90 opacity-100' : 'scale-100'}`}
+              style={{ 
+                imageRendering: 'auto',
+                filter: scrollY > 50 || isHeroActive ? 'none' : 'grayscale(1) brightness(2)'
+              }}
               referrerPolicy="no-referrer"
             />
           </div>
@@ -60,10 +79,6 @@ export default function App() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="group flex items-center gap-4 p-2"
           >
-            <div className="flex flex-col items-end gap-1.5 overflow-hidden">
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] h-3 leading-none group-hover:-translate-y-4 transition-transform duration-300">Menu</span>
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] h-3 leading-none translate-y-4 group-hover:-translate-y-0 text-brand-orange transition-transform duration-300">Open</span>
-            </div>
             <div className="flex flex-col gap-1.5">
               <div className={`w-8 h-1 bg-on-surface transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2.5' : ''}`} />
               <div className={`w-8 h-1 bg-on-surface transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
@@ -75,12 +90,28 @@ export default function App() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative h-screen bg-on-surface overflow-hidden">
+        <section 
+          className="relative h-screen bg-on-surface overflow-hidden group/hero"
+          onMouseMove={() => {
+            setIsHeroActive(true);
+            // Clear existing timeout if any is handled via state or just let it be transient
+          }}
+          onMouseLeave={() => setIsHeroActive(false)}
+          onTouchStart={() => setIsHeroActive(true)}
+          onTouchEnd={() => setTimeout(() => setIsHeroActive(false), 2000)}
+        >
           <motion.div 
             initial={{ scale: 1.15, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute inset-0 grayscale contrast-[1.2] brightness-[0.6] md:brightness-[0.7]"
+            animate={{ 
+              scale: 1, 
+              opacity: 1,
+              filter: (scrollY > 50 || (isHeroActive && scrollY < 300)) ? 'grayscale(0) brightness(1) contrast(1)' : 'grayscale(1) brightness(0.6) contrast(1.2)'
+            }}
+            transition={{ 
+              filter: { duration: 1.5, ease: "easeOut" },
+              default: { duration: 2.5, ease: [0.16, 1, 0.3, 1] }
+            }}
+            className="absolute inset-0"
           >
             <img 
               src={IMAGES.hero} 
@@ -90,7 +121,7 @@ export default function App() {
             />
           </motion.div>
           
-          <div className="absolute inset-0 bg-gradient-to-tr from-on-surface via-transparent to-transparent opacity-80" />
+          <div className={`absolute inset-0 bg-gradient-to-tr from-on-surface via-transparent to-transparent transition-opacity duration-1000 ${scrollY > 50 || isHeroActive ? 'opacity-40' : 'opacity-80'}`} />
 
           <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-end pb-12 sm:pb-24 px-6 md:px-12 max-w-screen-2xl mx-auto px-6">
             <div className="space-y-12 max-w-4xl">
@@ -100,12 +131,12 @@ export default function App() {
                 transition={{ delay: 0.3, duration: 1 }}
                 className="space-y-6"
               >
-                <div className="overflow-hidden bg-brand-yellow/10 backdrop-blur-md py-6 border-y border-white/10 -mx-6 md:-mx-12 rotate-[-0.5deg]">
+                <div className={`overflow-hidden bg-brand-yellow/10 backdrop-blur-[2px] py-3 border-y border-white/10 -mx-6 md:-mx-12 rotate-[-2deg] transition-all duration-1000 ${scrollY > 50 || isHeroActive ? 'bg-black/20' : ''}`}>
                   <div className="flex whitespace-nowrap animate-marquee">
                     {[...Array(6)].map((_, i) => (
-                      <span key={i} className="text-white text-[clamp(1.5rem,6vw,4rem)] font-black uppercase tracking-tighter mx-10 flex items-center gap-10">
-                        No Limit Crew <span className="w-4 h-4 md:w-6 md:h-6 bg-brand-orange rotate-45 shrink-0 shadow-[0_0_20px_rgba(232,81,26,0.5)]" />
-                        No Limit Association <span className="w-4 h-4 md:w-6 md:h-6 bg-brand-green rotate-45 shrink-0 shadow-[0_0_20px_rgba(30,158,74,0.5)]" />
+                      <span key={i} className="text-white text-[clamp(1.2rem,4vw,2.5rem)] font-bold uppercase tracking-tighter mx-10 flex items-center gap-10">
+                        No Limit Crew <span className="w-3 h-3 md:w-4 md:h-4 bg-brand-orange rotate-45 shrink-0 shadow-[0_0_15px_rgba(232,81,26,0.5)]" />
+                        No Limit Association <span className="w-3 h-3 md:w-4 md:h-4 bg-brand-green rotate-45 shrink-0 shadow-[0_0_15px_rgba(30,158,74,0.5)]" />
                       </span>
                     ))}
                   </div>
@@ -120,12 +151,12 @@ export default function App() {
               >
                 <button 
                   onClick={() => document.getElementById('événements')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="group relative h-20 bg-brand-orange text-white px-12 text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange/90 flex items-center justify-center gap-4 active:scale-95 shadow-[0_15px_30px_rgba(232,81,26,0.3)]"
+                  className="group relative h-12 bg-brand-orange text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange/90 flex items-center justify-center gap-4 active:scale-95 shadow-[0_15px_30px_rgba(232,81,26,0.3)]"
                 >
-                  Nos événements <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  Nos événements <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
 
-                <button className="h-20 bg-white/10 backdrop-blur-md border border-white/20 text-white px-12 text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white hover:text-on-surface flex items-center justify-center active:scale-95">
+                <button className="h-12 bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white hover:text-on-surface flex items-center justify-center active:scale-95">
                   Devenir partenaire
                 </button>
               </motion.div>
