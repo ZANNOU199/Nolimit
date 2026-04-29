@@ -125,15 +125,15 @@ export default function App() {
           
           <div className={`absolute inset-0 bg-gradient-to-tr from-on-surface via-transparent to-transparent transition-opacity duration-1000 ${scrollY > 50 || isHeroActive ? 'opacity-40' : 'opacity-80'}`} />
 
-          <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-center pb-8 sm:pb-16 px-6 md:px-12 max-w-screen-2xl mx-auto">
-            <div className="space-y-10 max-w-4xl mt-48 md:mt-40">
+          <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-center pb-8 sm:pb-16 text-center">
+            <div className="space-y-10 w-full mt-48 md:mt-40">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 1 }}
-                className="space-y-6"
+                className="space-y-6 w-full"
               >
-                <div className={`overflow-hidden bg-brand-yellow/10 backdrop-blur-[2px] py-3 border-y border-white/10 -mx-6 md:-mx-12 rotate-[-2deg] transition-all duration-1000 ${scrollY > 50 || isHeroActive ? 'bg-black/20' : ''}`}>
+                <div className={`overflow-hidden bg-brand-yellow/10 backdrop-blur-[2px] py-3 border-y border-white/10 w-full rotate-[-1deg] transition-all duration-1000 ${scrollY > 50 || isHeroActive ? 'bg-black/20' : ''}`}>
                   <div className="flex whitespace-nowrap animate-marquee">
                     {[...Array(6)].map((_, i) => (
                       <span key={i} className="text-white text-[clamp(1.2rem,4vw,2.5rem)] font-bold uppercase tracking-tighter mx-10 flex items-center gap-10">
@@ -149,9 +149,9 @@ export default function App() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1, duration: 1.2 }}
-                className="flex flex-col gap-4 sm:gap-10"
+                className="flex flex-col items-center gap-4 sm:gap-10 max-w-4xl mx-auto px-6"
               >
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <button 
                     onClick={() => document.getElementById('événements')?.scrollIntoView({ behavior: 'smooth' })}
                     className="group relative h-12 bg-brand-orange text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange/90 flex items-center justify-center gap-4 active:scale-95 shadow-[0_15px_30px_rgba(232,81,26,0.3)]"
@@ -168,17 +168,17 @@ export default function App() {
                 <motion.div 
                   animate={{ y: [0, 10, 0] }}
                   transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                  className="flex flex-col items-center md:items-start gap-1 opacity-60 -mt-6 sm:mt-0"
+                  className="flex flex-col items-center gap-1 opacity-60 -mt-6 sm:mt-0"
                 >
                   {[...Array(3)].map((_, i) => (
-                    <ChevronDown key={i} size={14} className="text-brand-green -mt-2 first:mt-0" />
+                    <ChevronDown key={i} size={14} className="text-brand-yellow -mt-2 first:mt-0" />
                   ))}
                 </motion.div>
               </motion.div>
             </div>
 
-            {/* Social Links at bottom of Hero */}
-            <div className="absolute bottom-12 left-6 md:left-12 flex flex-col md:flex-row items-center gap-4 md:gap-8 pt-8 border-t border-white/10 w-[calc(100%-3rem)] md:w-auto">
+            {/* Social Links at bottom of Hero - Full Width */}
+            <div className="absolute bottom-12 left-0 right-0 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 pt-8 border-t border-white/10 px-6">
               <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">Suivez-nous</span>
               <div className="flex gap-6">
                 {[Instagram, Youtube, Twitter, Facebook].map((Icon, i) => (
