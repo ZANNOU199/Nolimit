@@ -12,8 +12,11 @@ import {
   Library, 
   Instagram, 
   Youtube, 
+  Twitter,
+  Facebook,
   ArrowUpRight,
   MapPin,
+  ChevronDown,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -122,8 +125,8 @@ export default function App() {
           
           <div className={`absolute inset-0 bg-gradient-to-tr from-on-surface via-transparent to-transparent transition-opacity duration-1000 ${scrollY > 50 || isHeroActive ? 'opacity-40' : 'opacity-80'}`} />
 
-          <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-end pb-12 sm:pb-24 px-6 md:px-12 max-w-screen-2xl mx-auto px-6">
-            <div className="space-y-12 max-w-4xl">
+          <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-center pb-8 sm:pb-16 px-6 md:px-12 max-w-screen-2xl mx-auto">
+            <div className="space-y-10 max-w-4xl mt-20">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -159,6 +162,29 @@ export default function App() {
                   Devenir partenaire
                 </button>
               </motion.div>
+            </div>
+
+            {/* Scroll Indicator - 3 Arrows */}
+            <motion.div 
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="absolute bottom-32 left-1/2 -translate-x-1/2 md:left-12 md:translate-x-0 flex flex-col items-center md:items-start gap-1 opacity-60"
+            >
+              {[...Array(3)].map((_, i) => (
+                <ChevronDown key={i} size={14} className="text-brand-green -mt-2 first:mt-0" />
+              ))}
+            </motion.div>
+
+            {/* Social Links at bottom of Hero */}
+            <div className="absolute bottom-12 left-6 md:left-12 flex flex-col md:flex-row items-center gap-4 md:gap-8 pt-8 border-t border-white/10 w-[calc(100%-3rem)] md:w-auto">
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30">Suivez-nous</span>
+              <div className="flex gap-6">
+                {[Instagram, Youtube, Twitter, Facebook].map((Icon, i) => (
+                  <a key={i} href="#" className="text-white/40 hover:text-brand-orange transition-colors">
+                    <Icon size={18} />
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </section>
