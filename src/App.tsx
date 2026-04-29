@@ -149,31 +149,33 @@ export default function App() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1, duration: 1.2 }}
-                className="flex flex-col sm:flex-row gap-4"
+                className="flex flex-col gap-4 sm:gap-10"
               >
-                <button 
-                  onClick={() => document.getElementById('événements')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="group relative h-12 bg-brand-orange text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange/90 flex items-center justify-center gap-4 active:scale-95 shadow-[0_15px_30px_rgba(232,81,26,0.3)]"
-                >
-                  Nos événements <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button 
+                    onClick={() => document.getElementById('événements')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="group relative h-12 bg-brand-orange text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange/90 flex items-center justify-center gap-4 active:scale-95 shadow-[0_15px_30px_rgba(232,81,26,0.3)]"
+                  >
+                    Nos événements <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </button>
 
-                <button className="h-12 bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white hover:text-on-surface flex items-center justify-center active:scale-95">
-                  Devenir partenaire
-                </button>
+                  <button className="h-12 bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white hover:text-on-surface flex items-center justify-center active:scale-95">
+                    Devenir partenaire
+                  </button>
+                </div>
+
+                {/* Scroll Indicator - 3 Arrows (linked to buttons) */}
+                <motion.div 
+                  animate={{ y: [0, 10, 0] }}
+                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                  className="flex flex-col items-center md:items-start gap-1 opacity-60 -mt-6 sm:mt-0"
+                >
+                  {[...Array(3)].map((_, i) => (
+                    <ChevronDown key={i} size={14} className="text-brand-green -mt-2 first:mt-0" />
+                  ))}
+                </motion.div>
               </motion.div>
             </div>
-
-            {/* Scroll Indicator - 3 Arrows */}
-            <motion.div 
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-              className="absolute bottom-32 left-1/2 -translate-x-1/2 md:left-12 md:translate-x-0 flex flex-col items-center md:items-start gap-1 opacity-60"
-            >
-              {[...Array(3)].map((_, i) => (
-                <ChevronDown key={i} size={14} className="text-brand-green -mt-2 first:mt-0" />
-              ))}
-            </motion.div>
 
             {/* Social Links at bottom of Hero */}
             <div className="absolute bottom-12 left-6 md:left-12 flex flex-col md:flex-row items-center gap-4 md:gap-8 pt-8 border-t border-white/10 w-[calc(100%-3rem)] md:w-auto">
