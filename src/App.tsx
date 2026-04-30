@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { AdminDashboard } from './components/AdminDashboard';
 import {
   ArrowUpRight,
   ChevronDown,
@@ -21,7 +22,8 @@ import {
   Theater,
   Users,
   Dumbbell,
-  Library
+  Library,
+  Settings
 } from 'lucide-react';
 
 const IMAGES = {
@@ -167,6 +169,113 @@ export default function App() {
   const [scrollY, setScrollY] = useState(0);
   const [isHeroActive, setIsHeroActive] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [currentView, setCurrentView] = useState<'home' | 'gallery' | 'agenda'>('home');
+  
+  const defaultSiteData = {
+    blogPosts: BLOG_POSTS,
+    events: [
+      { id: 1, date: '18', month: 'OCT', title: 'Conférence & Masterclass', location: 'Lomé, Togo', status: 'Inscriptions', desc: 'Échanges sur la professionnalisation de la danse urbaine.' },
+      { id: 2, date: '02', month: 'NOV', title: 'All Star Battle Finale', location: 'Stade de Lomé', status: 'Billets', desc: 'Le plus grand événement de breaking de l\'année.' },
+      { id: 3, date: '15', month: 'DÉC', title: 'NLC Academy Showcase', location: 'NLC Studio', status: 'Gratuit', desc: 'Présentation des nouveaux talents de l\'académie.' }
+    ],
+    gallery: [
+      { id: 1, url: IMAGES.gallery3, title: 'Battle Finale', year: '2024' },
+      { id: 2, url: IMAGES.gallery4, title: 'Performance Solo', year: '2024' },
+      { id: 3, url: IMAGES.gallery2, title: 'Workshop Elite', year: '2024' },
+      { id: 4, url: IMAGES.gallery5, title: 'Cultures Urbaines', year: '2024' },
+      { id: 5, url: IMAGES.gallery1, title: 'Entraînement NLC', year: '2024' },
+      { id: 6, url: IMAGES.hero, title: 'All Star Battle', year: '2024' },
+    ],
+    highlights: {
+      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      posterUrl: IMAGES.hero,
+      title: 'ALL STAR BATTLE 2024',
+      subtitle: 'Highlight du Festival'
+    },
+    backgrounds: {
+      hero: 'https://i.ibb.co/Rps321Pt/78-A0328-resultat-resultat-resultat.webp',
+      about: 'https://i.ibb.co/s9c104ts/bboy-steph-7-1777561657840.jpg',
+      cta: IMAGES.gallery5
+    }
+  };
+
+  const handleDownloadSponsoring = () => {
+    // Simulate PDF download
+    const link = document.createElement('a');
+    link.href = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf';
+    link.download = 'Dossier_Sponsoring_NLC.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert('Le dossier de sponsoring est en train de se télécharger...');
+  };
+
+  const [siteData, setSiteData] = useState(() => {
+    const saved = localStorage.getItem('nlc_cms_data');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        
+        // Helper to check if a URL is from the old unsplash defaults
+        const isOldDefault = (url: string) => !url || url.includes('unsplash.com');
+
+        // Deep merge with force-update for old defaults
+        return {
+          ...defaultSiteData,
+          ...parsed,
+          backgrounds: { 
+            ...defaultSiteData.backgrounds, 
+            ...parsed.backgrounds,
+            hero: isOldDefault(parsed.backgrounds?.hero) ? defaultSiteData.backgrounds.hero : parsed.backgrounds.hero,
+            about: isOldDefault(parsed.backgrounds?.about) ? defaultSiteData.backgrounds.about : parsed.backgrounds.about,
+          },
+          highlights: { ...defaultSiteData.highlights, ...parsed.highlights },
+          // If events or gallery are empty or default-length, prefer the new defaults
+          events: (!parsed.events || parsed.events.length <= 2) ? defaultSiteData.events : parsed.events,
+          gallery: (!parsed.gallery || parsed.gallery.length <= 4) ? defaultSiteData.gallery : parsed.gallery
+        };
+      } catch (e) {
+        return defaultSiteData;
+      }
+    }
+    return defaultSiteData;
+  });
+
+  // Keep data in sync with localStorage updates from within the app
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const saved = localStorage.getItem('nlc_cms_data');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          const isOldDefault = (url: string) => !url || url.includes('unsplash.com');
+          
+          setSiteData(prev => ({
+            ...defaultSiteData,
+            ...parsed,
+            backgrounds: { 
+              ...defaultSiteData.backgrounds, 
+              ...parsed.backgrounds,
+              hero: isOldDefault(parsed.backgrounds?.hero) ? defaultSiteData.backgrounds.hero : parsed.backgrounds.hero,
+              about: isOldDefault(parsed.backgrounds?.about) ? defaultSiteData.backgrounds.about : parsed.backgrounds.about,
+            },
+            highlights: { ...defaultSiteData.highlights, ...parsed.highlights },
+            events: (!parsed.events || parsed.events.length <= 2) ? defaultSiteData.events : parsed.events,
+            gallery: (!parsed.gallery || parsed.gallery.length <= 4) ? defaultSiteData.gallery : parsed.gallery
+          }));
+        } catch (e) {}
+      }
+    };
+    const interval = setInterval(handleStorageChange, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (currentView !== 'home') {
+       window.scrollTo(0, 0);
+    }
+  }, [currentView]);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -234,7 +343,10 @@ export default function App() {
 
       <main>
         <h1 className="sr-only">All Star Battle International - Organisation de danse en Afrique - No Limit Crew</h1>
-        {/* Hero Section */}
+        
+        {currentView === 'home' ? (
+          <>
+            {/* Hero Section */}
         <section 
           className="relative h-screen bg-on-surface overflow-hidden group/hero"
           onMouseMove={() => {
@@ -258,7 +370,7 @@ export default function App() {
             className="absolute inset-0"
           >
             <img 
-              src={IMAGES.hero} 
+              src={siteData.backgrounds.hero} 
               alt="Mouvement de danse spectaculaire" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
@@ -306,23 +418,14 @@ export default function App() {
                 className="flex flex-col sm:flex-row justify-center gap-4 pt-4"
               >
                 <button 
-                  onClick={() => scrollTo('événements')}
+                  onClick={() => setCurrentView('agenda')}
                   className="group relative h-12 bg-white text-on-surface px-10 text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange hover:text-white flex items-center justify-center gap-4 active:scale-95 shadow-2xl"
                 >
                   Explorer l'agenda <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
 
-                <a 
-                  href="https://allstarbattle.dance"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="h-12 bg-brand-orange text-white px-10 text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-on-surface flex items-center justify-center active:scale-95 shadow-xl"
-                >
-                  Site Officiel ASB
-                </a>
-
                 <button 
-                  onClick={() => scrollTo('contact')}
+                  onClick={handleDownloadSponsoring}
                   className="h-12 bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white/20 flex items-center justify-center active:scale-95"
                 >
                   Devenir partenaire
@@ -414,7 +517,7 @@ export default function App() {
             </div>
           </div>
           <div className="aspect-square bg-on-surface/5 relative overflow-hidden">
-             <img src={IMAGES.gallery1} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="About" />
+             <img src={siteData.backgrounds.about} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="About" />
           </div>
         </div>
       </section>
@@ -448,11 +551,7 @@ export default function App() {
             </div>
 
             <div className="divide-y divide-on-surface/10 bg-white border border-on-surface/5 shadow-2xl">
-              {[
-                { date: "12", month: "AVR", title: "ASB Qualifiers West", location: "Centre Culturel, Lomé TG", status: "Open Now", theme: "brand-orange", bg: "bg-brand-orange/5" },
-                { date: "02", month: "JUIL", title: "All Star Battle Int.", location: "Institut Français, Lomé TG", status: "Event", theme: "brand-green", bg: "bg-brand-green/5" },
-                { date: "15", month: "AOÛT", title: "Masterclass Elite", location: "NLC Academy, Lomé TG", status: "Booking", theme: "brand-yellow", bg: "bg-brand-yellow/5" }
-              ].map((event, i) => (
+              {siteData.events.slice(0, 3).map((event: any, i: number) => (
                 <motion.div 
                   key={i} 
                   initial={{ opacity: 0, x: -20 }}
@@ -461,8 +560,8 @@ export default function App() {
                   transition={{ delay: i * 0.1 }}
                   className="group grid grid-cols-1 md:grid-cols-12 gap-8 py-16 px-8 items-center hover:bg-surface-alt transition-all"
                 >
-                  <div className={`md:col-span-2 flex flex-col items-center justify-center p-6 ${event.bg} rounded-sm`}>
-                    <span className={`text-6xl font-black leading-none text-${event.theme}`}>{event.date}</span>
+                  <div className={`md:col-span-2 flex flex-col items-center justify-center p-6 bg-brand-orange/5 rounded-sm`}>
+                    <span className={`text-6xl font-black leading-none text-brand-orange`}>{event.date}</span>
                     <span className="text-[10px] font-black tracking-[0.5em] text-on-surface/40 mt-3">{event.month}</span>
                   </div>
                   
@@ -471,18 +570,27 @@ export default function App() {
                       {event.title}
                     </h4>
                     <div className="flex items-center justify-center md:justify-start gap-3 text-on-surface-muted text-sm font-medium">
-                      <div className={`w-2 h-2 rounded-full bg-${event.theme}`} />
-                      {event.location}
+                      <div className={`w-2 h-2 rounded-full bg-brand-orange`} />
+                      {event.location || event.desc}
                     </div>
                   </div>
 
                   <div className="md:col-span-3 flex justify-center md:justify-end">
                     <button className={`w-full md:w-48 h-16 border-2 border-on-surface font-black uppercase tracking-[0.4em] text-[10px] transition-all hover:bg-on-surface hover:text-white hover:shadow-[8px_8px_0px_#E8511A]`}>
-                      {event.status}
+                      {event.status || 'VOIR'}
                     </button>
                   </div>
                 </motion.div>
               ))}
+            </div>
+            
+            <div className="mt-16 flex justify-center">
+               <button 
+                onClick={() => setCurrentView('agenda')}
+                className="h-16 px-12 border-2 border-on-surface text-on-surface hover:bg-on-surface hover:text-white text-[10px] font-black uppercase tracking-[0.4em] transition-all"
+               >
+                 Voir plus d'événements
+               </button>
             </div>
           </div>
         </section>
@@ -522,7 +630,7 @@ export default function App() {
                 onClick={() => setIsVideoPlaying(true)}
               >
                 <img 
-                  src={IMAGES.hero} 
+                  src={siteData.highlights.posterUrl} 
                   alt="Video Poster" 
                   className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
                 />
@@ -535,9 +643,9 @@ export default function App() {
                   <div className="space-y-2 md:space-y-4">
                     <div className="flex items-center gap-3">
                       <span className="w-8 h-px bg-brand-orange" />
-                      <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-white/80">Highlight du Festival</p>
+                      <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-white/80">{siteData.highlights.subtitle}</p>
                     </div>
-                    <h3 className="text-2xl md:text-5xl font-black uppercase text-white tracking-widest leading-none">ALL STAR BATTLE 2024</h3>
+                    <h3 className="text-2xl md:text-5xl font-black uppercase text-white tracking-widest leading-none">{siteData.highlights.title}</h3>
                   </div>
                   <div className="hidden md:flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-white border-b border-white/30 pb-2 hover:border-brand-orange transition-colors">
                     VOIR LE FILM
@@ -547,7 +655,7 @@ export default function App() {
             ) : (
               <iframe 
                 className="w-full h-full absolute inset-0"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3" 
+                src={`${siteData.highlights.videoUrl}?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3`} 
                 title="All Star Battle Highlights"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -574,7 +682,7 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-on-surface/10 border border-on-surface/10 overflow-hidden shadow-2xl">
-            {BLOG_POSTS.map((post, i) => (
+            {siteData.blogPosts.map((post: any, i: number) => (
               <motion.article 
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
@@ -620,27 +728,32 @@ export default function App() {
       <section id="archives" className="py-24 md:py-32 px-6 md:px-12 bg-on-surface text-white">
         <div className="max-w-screen-2xl mx-auto">
           <SectionLabel>Galerie & Archives</SectionLabel>
-          <div className="grid grid-cols-12 grid-rows-2 gap-3 h-[70vw] max-h-[700px]">
-             <div className="col-span-12 md:col-span-7 row-span-2 relative overflow-hidden group">
-               <img src={IMAGES.gallery3} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" alt="" />
-               <div className="absolute inset-0 bg-brand-orange/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-             </div>
-             <div className="col-span-12 md:col-span-5 row-span-1 relative overflow-hidden">
-               <img src={IMAGES.gallery4} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="" />
-             </div>
-             <div className="col-span-6 md:col-span-2 row-span-1 relative overflow-hidden">
-               <img src={IMAGES.gallery2} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="" />
-             </div>
-             <div className="col-span-6 md:col-span-3 row-span-1 relative overflow-hidden">
-               <img src={IMAGES.gallery5} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="" />
-             </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+             {siteData.gallery.slice(0, 6).map((img: any, i: number) => (
+               <motion.div 
+                key={img.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="aspect-square relative overflow-hidden group bg-on-surface/20"
+               >
+                 <img src={img.url} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" alt={img.title} />
+                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-brand-orange">{img.year}</div>
+                      <div className="text-sm font-black uppercase tracking-tighter">{img.title}</div>
+                    </div>
+                 </div>
+               </motion.div>
+             ))}
           </div>
           <div className="mt-12 flex justify-center">
             <button 
-              onClick={() => window.open('https://www.instagram.com/nolimitcrew_togo', '_blank')}
-              className="group flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-brand-orange transition-colors"
+              onClick={() => setCurrentView('gallery')}
+              className="h-16 px-12 border-2 border-white/20 hover:border-brand-orange hover:bg-brand-orange text-white text-[10px] font-black uppercase tracking-[0.4em] transition-all"
             >
-              Voir plus <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              VOIR PLUS D'ARCHIVES
             </button>
           </div>
         </div>
@@ -675,7 +788,10 @@ export default function App() {
               </div>
 
               <div className="pt-2">
-                 <button className="w-full sm:w-auto h-14 bg-brand-orange text-white px-10 text-[9px] font-black uppercase tracking-[0.4em] hover:bg-brand-orange/90 transition-all shadow-xl hover:shadow-brand-orange/30">
+                 <button 
+                  onClick={handleDownloadSponsoring}
+                  className="w-full sm:w-auto h-14 bg-brand-orange text-white px-10 text-[9px] font-black uppercase tracking-[0.4em] hover:bg-brand-orange/90 transition-all shadow-xl hover:shadow-brand-orange/30"
+                 >
                    Devenir partenaire officiel
                  </button>
                  <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface/30 mt-4">Dossier sponsor 2025 disponible</p>
@@ -703,7 +819,13 @@ export default function App() {
           <ContactForm />
         </div>
       </section>
-    </main>
+    </>
+  ) : currentView === 'gallery' ? (
+    <GalleryPage siteData={siteData} onBack={() => setCurrentView('home')} />
+  ) : (
+    <AgendaPage siteData={siteData} onBack={() => setCurrentView('home')} />
+  )}
+</main>
 
       {/* ── FOOTER (New Editorial Version) ─────────────────── */}
       <footer className="bg-on-surface text-white py-20 px-6 md:px-12">
@@ -743,15 +865,25 @@ export default function App() {
                  ))}
               </div>
            </div>
-           <div className="pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
-              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20">© 2025 Association No Limit Crew · Lomé, Togo</span>
-              <div className="flex gap-8 text-[9px] font-black uppercase tracking-[0.4em] text-white/20">
+           <div className="pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-[9px] font-black uppercase tracking-[0.4em] text-white/20">
+              <span className="">© 2025 Association No Limit Crew · Lomé, Togo</span>
+              <button 
+                onClick={() => setIsAdminOpen(true)}
+                className="flex items-center gap-2 hover:text-brand-orange transition-colors"
+                title="Simulation Dashboard"
+              >
+                <Settings size={12} /> Dashboard Admin
+              </button>
+              <div className="flex gap-8">
                  <a href="#" className="hover:text-white/50 transition-colors">Mentions légales</a>
                  <a href="#" className="hover:text-white/50 transition-colors">Confidentialité</a>
               </div>
            </div>
         </div>
       </footer>
+
+      {/* Admin Dashboard Simulation */}
+      {isAdminOpen && <AdminDashboard onClose={() => setIsAdminOpen(false)} />}
 
       {/* Mobile Nav removed as requested */}
 
@@ -842,5 +974,64 @@ function ContactForm() {
       <textarea placeholder="Message" rows={4} className="w-full bg-transparent border-b border-on-surface/20 py-3 outline-none focus:border-brand-orange transition-colors resize-none" />
       <button className="w-full h-14 bg-on-surface text-white font-black uppercase tracking-widest text-xs hover:bg-brand-orange transition-colors">Envoyer</button>
     </form>
+  );
+}
+
+function GalleryPage({ siteData, onBack }: { siteData: any, onBack: () => void }) {
+  return (
+    <div className="min-h-screen bg-on-surface text-white pt-32 pb-20 px-6 md:px-12 font-sans">
+      <div className="max-w-screen-2xl mx-auto">
+        <button onClick={onBack} className="flex items-center gap-2 text-brand-orange font-black uppercase tracking-widest text-[10px] mb-12 hover:gap-4 transition-all">
+          &larr; Retour à l'accueil
+        </button>
+        <SectionLabel>Galerie Complète</SectionLabel>
+        <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-16">Archives <span className="text-brand-orange italic">NLC</span></h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {siteData.gallery.map((img: any) => (
+            <div key={img.id} className="aspect-square relative overflow-hidden group bg-white/5">
+              <img src={img.url} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                <div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-brand-orange">{img.year}</div>
+                  <div className="text-sm font-black uppercase tracking-tighter">{img.title}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AgendaPage({ siteData, onBack }: { siteData: any, onBack: () => void }) {
+  return (
+    <div className="min-h-screen bg-white text-on-surface pt-32 pb-20 px-6 md:px-12 font-sans">
+      <div className="max-w-screen-2xl mx-auto">
+        <button onClick={onBack} className="flex items-center gap-2 text-brand-orange font-black uppercase tracking-widest text-[10px] mb-12 hover:gap-4 transition-all">
+          &larr; Retour à l'accueil
+        </button>
+        <SectionLabel>Agenda Complet</SectionLabel>
+        <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-16">Programmation <span className="text-brand-orange italic">2025-26</span></h2>
+        <div className="divide-y divide-on-surface/10">
+          {siteData.events.map((event: any) => (
+            <div key={event.id} className="grid grid-cols-1 md:grid-cols-12 gap-8 py-16 items-center">
+              <div className="md:col-span-2 flex flex-col items-center justify-center p-6 bg-brand-orange/5">
+                <span className="text-6xl font-black text-brand-orange">{event.date}</span>
+                <span className="text-[10px] font-black tracking-widest uppercase opacity-40">{event.month}</span>
+              </div>
+              <div className="md:col-span-10 space-y-4">
+                <h3 className="text-4xl font-black uppercase tracking-tighter">{event.title}</h3>
+                <p className="text-on-surface-muted italic">{event.desc}</p>
+                <div className="flex items-center gap-6 text-xs font-bold">
+                   <div className="flex items-center gap-2"><MapPin size={14} className="text-brand-orange" /> {event.location}</div>
+                   <div className="bg-on-surface text-white px-4 py-1 uppercase text-[10px]">{event.status}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
