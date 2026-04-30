@@ -13,6 +13,7 @@ import {
   Twitter,
   Facebook,
   MapPin,
+  Globe,
   X,
   Menu,
   Calendar,
@@ -37,8 +38,30 @@ const NAV_ITEMS = [
   { label: 'À propos', id: 'about' },
   { label: 'Festival', id: 'festival' },
   { label: 'Événements', id: 'événements' },
+  { label: 'Journal', id: 'blog' },
   { label: 'Galerie', id: 'archives' },
   { label: 'Contact', id: 'contact' },
+];
+
+const BLOG_POSTS = [
+  {
+    category: "Culture",
+    title: "Le Breaking aux JO 2024 : Une reconnaissance historique pour la scène africaine",
+    date: "24 OCT 2024",
+    image: "https://images.unsplash.com/photo-1535533725845-adcee9203a93?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    category: "Coulisses",
+    title: "Reportage : 48h en immersion totale dans l'organisation de l'All Star Battle",
+    date: "12 AOUT 2024",
+    image: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    category: "Elite",
+    title: "Interview : Bboy Steph nous livre les secrets de la victoire du No Limit Crew",
+    date: "05 JUIN 2024",
+    image: "https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=1200&auto=format&fit=crop"
+  }
 ];
 
 const EVENTS = [
@@ -143,6 +166,7 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [isHeroActive, setIsHeroActive] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -288,6 +312,15 @@ export default function App() {
                   Explorer l'agenda <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
 
+                <a 
+                  href="https://allstarbattle.dance"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-12 bg-brand-orange text-white px-10 text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-on-surface flex items-center justify-center active:scale-95 shadow-xl"
+                >
+                  Site Officiel ASB
+                </a>
+
                 <button 
                   onClick={() => scrollTo('contact')}
                   className="h-12 bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white/20 flex items-center justify-center active:scale-95"
@@ -404,9 +437,14 @@ export default function App() {
                   </a>
                 </div>
               </div>
-              <button className="h-16 border-b-2 border-brand-orange text-xs font-black uppercase tracking-[0.4em] px-2 hover:text-brand-orange transition-all flex items-center gap-4">
-                View All dates <ArrowUpRight size={20} />
-              </button>
+              <a 
+                href="https://allstarbattle.dance"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-16 border-b-2 border-brand-orange text-xs font-black uppercase tracking-[0.4em] px-2 hover:text-brand-orange transition-all flex items-center gap-4"
+              >
+                Toutes les dates <ArrowUpRight size={20} />
+              </a>
             </div>
 
             <div className="divide-y divide-on-surface/10 bg-white border border-on-surface/5 shadow-2xl">
@@ -468,16 +506,112 @@ export default function App() {
         <div className="max-w-screen-2xl mx-auto">
           <div className="flex justify-between items-end mb-12">
             <SectionLabel>Highlights</SectionLabel>
-            <button className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-orange hover:translate-x-2 transition-transform">Voir sur YouTube &rarr;</button>
+            <a 
+              href="https://allstarbattle.dance" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-orange hover:translate-x-2 transition-transform inline-flex items-center gap-2"
+            >
+              AllStarBattle.dance &rarr;
+            </a>
           </div>
           <div className="relative aspect-video bg-on-surface overflow-hidden group shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)]">
-            <iframe 
-              className="w-full h-full absolute inset-0"
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-              title="All Star Battle Highlights"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+            {!isVideoPlaying ? (
+              <div 
+                className="absolute inset-0 cursor-pointer group"
+                onClick={() => setIsVideoPlaying(true)}
+              >
+                <img 
+                  src={IMAGES.hero} 
+                  alt="Video Poster" 
+                  className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-on-surface/40 group-hover:bg-on-surface/25 transition-colors duration-500 flex items-center justify-center">
+                  <div className="w-20 h-20 md:w-28 md:h-28 bg-brand-orange text-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:rotate-12">
+                    <Play fill="currentColor" size={40} className="ml-2" />
+                  </div>
+                </div>
+                <div className="absolute bottom-6 left-6 md:bottom-12 md:left-12 right-6 md:right-12 flex justify-between items-end">
+                  <div className="space-y-2 md:space-y-4">
+                    <div className="flex items-center gap-3">
+                      <span className="w-8 h-px bg-brand-orange" />
+                      <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] text-white/80">Highlight du Festival</p>
+                    </div>
+                    <h3 className="text-2xl md:text-5xl font-black uppercase text-white tracking-widest leading-none">ALL STAR BATTLE 2024</h3>
+                  </div>
+                  <div className="hidden md:flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-white border-b border-white/30 pb-2 hover:border-brand-orange transition-colors">
+                    VOIR LE FILM
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <iframe 
+                className="w-full h-full absolute inset-0"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3" 
+                title="All Star Battle Highlights"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BLOG / JOURNAL SECTION ────────────────────────── */}
+      <section id="blog" className="py-24 md:py-48 bg-surface-alt px-6 md:px-12 border-y border-on-surface/5">
+        <div className="max-w-screen-2xl mx-auto">
+          <div className="mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div className="max-w-2xl">
+              <SectionLabel>Le Journal</SectionLabel>
+              <h2 className="text-6xl md:text-[8rem] font-black uppercase tracking-tighter leading-[0.8] mb-8">
+                Chroniques<br />
+                <span className="text-brand-orange italic">Urbaines</span>
+              </h2>
+            </div>
+            <button className="h-16 group flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] px-2 hover:text-brand-orange transition-all">
+              Toutes les actualités <ArrowUpRight size={20} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-on-surface/10 border border-on-surface/10 overflow-hidden shadow-2xl">
+            {BLOG_POSTS.map((post, i) => (
+              <motion.article 
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.8 }}
+                className="group relative bg-white overflow-hidden flex flex-col h-full min-h-[500px]"
+              >
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img 
+                    src={post.image} 
+                    alt="" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0" 
+                  />
+                  <div className="absolute top-6 left-6 flex gap-2">
+                    <span className="bg-brand-orange text-white text-[8px] font-black uppercase tracking-widest px-3 py-1">
+                      {post.category}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="flex-1 p-8 md:p-12 flex flex-col justify-between">
+                  <div className="space-y-6">
+                    <div className="text-[10px] font-black tracking-[0.4em] text-on-surface/30">
+                      {post.date}
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter leading-tight group-hover:text-brand-orange transition-colors">
+                      {post.title}
+                    </h3>
+                  </div>
+                  
+                  <button className="mt-8 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-on-surface hover:text-brand-orange transition-all">
+                    Lire l'article <span className="w-8 h-px bg-on-surface group-hover:bg-brand-orange group-hover:w-12 transition-all" />
+                  </button>
+                </div>
+              </motion.article>
+            ))}
           </div>
         </div>
       </section>
@@ -590,9 +724,21 @@ export default function App() {
                 </nav>
               </div>
               <div className="flex gap-8">
-                 {[Instagram, Youtube, Twitter, Facebook].map((Icon, i) => (
-                   <a key={i} href="#" className="text-white/30 hover:text-brand-orange transition-colors">
-                     <Icon size={20} />
+                 {[
+                   { Icon: Instagram, url: "https://www.instagram.com/nolimitcrew_togo" },
+                   { Icon: Youtube, url: "https://youtube.com/@AllStarBattleInt" },
+                   { Icon: Globe, url: "https://allstarbattle.dance" },
+                   { Icon: Twitter, url: "#" },
+                   { Icon: Facebook, url: "#" }
+                 ].map((item, i) => (
+                   <a 
+                     key={i} 
+                     href={item.url} 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-white/30 hover:text-brand-orange transition-colors"
+                   >
+                     <item.Icon size={20} />
                    </a>
                  ))}
               </div>
@@ -620,8 +766,8 @@ export default function App() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-[100] bg-on-surface text-white flex flex-col p-8 md:p-16"
           >
-            <div className="flex justify-between items-center mb-16">
-              <img src={IMAGES.logo} alt="NLC" className="h-16 w-auto" />
+            <div className="flex justify-between items-center mb-8">
+              <img src={IMAGES.logo} alt="NLC" className="h-12 w-auto" />
               <button 
                 onClick={() => setIsMenuOpen(false)}
                 className="w-12 h-12 border border-white/20 flex items-center justify-center hover:border-brand-orange"
@@ -629,24 +775,36 @@ export default function App() {
                 <X size={18} />
               </button>
             </div>
-            <nav className="flex-1 flex flex-col justify-center gap-2">
+            <nav className="flex-1 flex flex-col justify-start mt-4 gap-0 md:gap-2">
               {NAV_ITEMS.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => { scrollTo(item.id); setIsMenuOpen(false); }}
-                  className="group text-left flex items-center justify-between py-4 border-b border-white/5 hover:border-brand-orange transition-colors"
+                  className="group text-left flex items-center justify-between py-2 md:py-4 border-b border-white/5 hover:border-brand-orange transition-colors"
                 >
-                  <span className="text-4xl md:text-7xl font-black uppercase tracking-tighter group-hover:text-brand-orange transition-colors">
+                  <span className="text-lg sm:text-2xl md:text-7xl font-black uppercase tracking-tighter group-hover:text-brand-orange transition-colors">
                     {item.label}
                   </span>
-                  <ArrowUpRight size={24} className="opacity-0 group-hover:opacity-100" />
+                  <ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100" />
                 </button>
               ))}
             </nav>
             <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-10">
               <div className="flex gap-10">
-                {[Instagram, Youtube].map((Icon, i) => (
-                  <Icon key={i} size={28} className="hover:text-brand-orange hover:scale-125 transition-all cursor-pointer" />
+                {[
+                  { Icon: Instagram, url: "https://www.instagram.com/nolimitcrew_togo" },
+                  { Icon: Youtube, url: "https://youtube.com/@AllStarBattleInt" },
+                  { Icon: Globe, url: "https://allstarbattle.dance" }
+                ].map((item, i) => (
+                  <a 
+                    key={i} 
+                    href={item.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-brand-orange hover:scale-125 transition-all cursor-pointer"
+                  >
+                    <item.Icon size={28} />
+                  </a>
                 ))}
               </div>
             </div>

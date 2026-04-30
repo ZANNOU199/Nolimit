@@ -18,7 +18,7 @@
   --color-accent-green: #f0f7f0;
   --color-accent-yellow: #fffdf5;
 
-  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee: marquee 25s linear infinite;
   --animate-marquee-fast: marquee 20s linear infinite;
 
   @keyframes marquee {
