@@ -26,7 +26,7 @@ import {
 const IMAGES = {
   logo: 'https://i.ibb.co/gFPmjbyS/Copie-de-LOGO-NO-LIMIT-CREW-ASSOCIATION-removebg-preview.png',
   hero: 'https://i.ibb.co/Rps321Pt/78-A0328-resultat-resultat-resultat.webp',
-  gallery1: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1400&auto=format&fit=crop',
+  gallery1: 'https://i.ibb.co/s9c104ts/bboy-steph-7-1777561657840.jpg',
   gallery2: 'https://images.unsplash.com/photo-1508807526345-15e9b5f4eaff?q=80&w=1400&auto=format&fit=crop',
   gallery3: 'https://images.unsplash.com/photo-1550026399-392e69575ee2?q=80&w=1400&auto=format&fit=crop',
   gallery4: 'https://images.unsplash.com/photo-1516475429286-465d815a0df7?q=80&w=1400&auto=format&fit=crop',
