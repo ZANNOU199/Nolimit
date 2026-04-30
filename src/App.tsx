@@ -26,7 +26,7 @@ import {
 const IMAGES = {
   logo: 'https://i.ibb.co/gFPmjbyS/Copie-de-LOGO-NO-LIMIT-CREW-ASSOCIATION-removebg-preview.png',
   hero: 'https://i.ibb.co/Rps321Pt/78-A0328-resultat-resultat-resultat.webp',
-  gallery1: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?q=80&w=1400&auto=format&fit=crop',
+  gallery1: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=1400&auto=format&fit=crop',
   gallery2: 'https://images.unsplash.com/photo-1508807526345-15e9b5f4eaff?q=80&w=1400&auto=format&fit=crop',
   gallery3: 'https://images.unsplash.com/photo-1550026399-392e69575ee2?q=80&w=1400&auto=format&fit=crop',
   gallery4: 'https://images.unsplash.com/photo-1516475429286-465d815a0df7?q=80&w=1400&auto=format&fit=crop',
@@ -176,17 +176,17 @@ export default function App() {
           scrollY > 80 ? 'bg-white/95 backdrop-blur-xl shadow-sm' : 'bg-transparent'
         }`}
       >
-        <div className="max-w-screen-2xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
-          <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-            <img src={IMAGES.logo} alt="NLC" className="h-12 w-auto object-contain" referrerPolicy="no-referrer" />
+        <div className="max-w-screen-2xl mx-auto px-4 md:px-6 lg:px-12 h-20 flex items-center justify-between gap-4">
+          <a href="#" className="shrink-0" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+            <img src={IMAGES.logo} alt="NLC" className="h-10 md:h-12 lg:h-16 w-auto object-contain transition-all" referrerPolicy="no-referrer" />
           </a>
 
-          <nav className="hidden md:flex items-center gap-10">
+          <nav className="ml-auto hidden md:flex items-center gap-4 lg:gap-8 xl:gap-10">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollTo(item.id)}
-                className="text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-muted hover:text-brand-orange transition-colors"
+                className="text-[8px] lg:text-[10px] font-black uppercase tracking-[0.3em] lg:tracking-[0.4em] text-on-surface-muted hover:text-brand-orange transition-colors whitespace-nowrap"
                 style={{ color: scrollY < 80 ? 'white' : undefined }}
               >
                 {item.label}
@@ -194,33 +194,27 @@ export default function App() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-6">
-            <button
-              onClick={() => scrollTo('contact')}
-              className="hidden md:flex items-center gap-3 h-10 px-6 bg-brand-orange text-white text-[9px] font-black uppercase tracking-[0.4em] hover:bg-brand-orange/90 transition-colors active:scale-95"
-            >
-              Rejoindre <ArrowUpRight size={13} />
-            </button>
+          <div className="flex items-center gap-3 lg:gap-6">
             <button
               onClick={() => setIsMenuOpen(true)}
-              className="flex flex-col gap-[5px] p-2 group"
+              className="md:hidden flex flex-col gap-[4px] lg:gap-[5px] p-2 group"
               aria-label="Menu"
             >
-              <span className={`block w-7 h-[2px] transition-all group-hover:bg-brand-orange ${scrollY < 80 ? 'bg-white' : 'bg-on-surface'}`} />
-              <span className={`block w-5 h-[2px] self-end transition-all group-hover:w-7 group-hover:bg-brand-orange ${scrollY < 80 ? 'bg-white' : 'bg-on-surface'}`} />
-              <span className={`block w-7 h-[2px] transition-all group-hover:bg-brand-orange ${scrollY < 80 ? 'bg-white' : 'bg-on-surface'}`} />
+              <span className={`block w-6 lg:w-7 h-[2px] transition-all group-hover:bg-brand-orange ${scrollY < 80 ? 'bg-white' : 'bg-on-surface'}`} />
+              <span className={`block w-4 lg:w-5 h-[2px] self-end transition-all group-hover:w-7 group-hover:bg-brand-orange ${scrollY < 80 ? 'bg-white' : 'bg-on-surface'}`} />
+              <span className={`block w-6 lg:w-7 h-[2px] transition-all group-hover:bg-brand-orange ${scrollY < 80 ? 'bg-white' : 'bg-on-surface'}`} />
             </button>
           </div>
         </div>
       </header>
 
       <main>
+        <h1 className="sr-only">All Star Battle International - Organisation de danse en Afrique - No Limit Crew</h1>
         {/* Hero Section */}
         <section 
           className="relative h-screen bg-on-surface overflow-hidden group/hero"
           onMouseMove={() => {
             setIsHeroActive(true);
-            // Clear existing timeout if any is handled via state or just let it be transient
           }}
           onMouseLeave={() => setIsHeroActive(false)}
           onTouchStart={() => setIsHeroActive(true)}
@@ -241,7 +235,7 @@ export default function App() {
           >
             <img 
               src={IMAGES.hero} 
-              alt="Mouvement de danse" 
+              alt="Mouvement de danse spectaculaire" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
@@ -249,30 +243,32 @@ export default function App() {
           
           <div className={`absolute inset-0 bg-gradient-to-tr from-on-surface via-transparent to-transparent transition-opacity duration-1000 ${scrollY > 50 || isHeroActive ? 'opacity-40' : 'opacity-80'}`} />
 
-          <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-center pb-8 sm:pb-16 text-center">
-            <div className="space-y-8 w-full mt-48 md:mt-64">
+          <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-center pb-8 sm:pb-16 text-center px-4">
+            <div className="space-y-6 sm:space-y-10 w-full mt-48 md:mt-32">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.2 }}
+                className="flex flex-col items-center"
               >
-                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-yellow mb-4 block">Togo — Depuis 2005</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-yellow block mb-4">SINCE 2005</span>
+                
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 1 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 1 }}
                 className="space-y-6 w-full"
               >
-                <div className={`overflow-hidden bg-brand-yellow/10 backdrop-blur-[2px] py-2 border-y border-white/10 w-full rotate-[-1deg] transition-all duration-1000 ${scrollY > 50 || isHeroActive ? 'bg-black/20' : ''}`}>
+                <div className={`overflow-hidden bg-brand-yellow/10 backdrop-blur-[2px] py-3 border-y border-white/10 w-full rotate-[-1deg] transition-all duration-1000 ${scrollY > 50 || isHeroActive ? 'bg-black/40' : ''}`}>
                   <div className="flex whitespace-nowrap animate-marquee">
                     {[...Array(6)].map((_, i) => (
-                      <span key={i} className="text-white text-[clamp(1rem,3.5vw,2.2rem)] font-bold uppercase tracking-tighter mx-10 flex items-center gap-8">
-                        <span>No Limit <span className="text-brand-orange italic">Crew</span></span>
-                        <span className="w-2 h-2 md:w-3 md:h-3 bg-white/40 rotate-45 shrink-0" />
-                        <span>No Limit <span className="text-brand-green italic">Association</span></span>
-                        <span className="w-2 h-2 md:w-3 md:h-3 bg-white/40 rotate-45 shrink-0" />
+                      <span key={i} className="text-white text-[clamp(1.2rem,3vw,2rem)] font-bold uppercase tracking-tighter mx-10 flex items-center gap-8">
+                        <span>All Star Battle <span className="text-brand-orange italic">International</span></span>
+                        <span className="w-2 h-2 md:w-3 md:h-3 bg-white/30 rotate-45 shrink-0" />
+                        <span className="opacity-80">No Limit Crew <span className="italic">Association</span></span>
+                        <span className="w-2 h-2 md:w-3 md:h-3 bg-white/30 rotate-45 shrink-0" />
                       </span>
                     ))}
                   </div>
@@ -280,36 +276,38 @@ export default function App() {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1, duration: 1.2 }}
-                className="flex flex-col items-center gap-4 sm:gap-10 max-w-4xl mx-auto px-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 1 }}
+                className="flex flex-col sm:flex-row justify-center gap-4 pt-4"
               >
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
-                  <button 
-                    onClick={() => document.getElementById('événements')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="group relative h-10 bg-brand-orange text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange/90 flex items-center justify-center gap-4 active:scale-95 shadow-[0_15px_30px_rgba(232,81,26,0.3)]"
-                  >
-                    Nos événements <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  </button>
-
-                  <button className="h-10 bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white hover:text-on-surface flex items-center justify-center active:scale-95">
-                    Devenir partenaire
-                  </button>
-                </div>
-
-                {/* Scroll Indicator - 3 Arrows (linked to buttons) */}
-                <motion.div 
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                  className="flex flex-col items-center gap-1 opacity-60 -mt-6 sm:mt-0"
+                <button 
+                  onClick={() => scrollTo('événements')}
+                  className="group relative h-12 bg-white text-on-surface px-10 text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange hover:text-white flex items-center justify-center gap-4 active:scale-95 shadow-2xl"
                 >
-                  {[...Array(3)].map((_, i) => (
-                    <ChevronDown key={i} size={14} className="text-brand-yellow -mt-2 first:mt-0" />
-                  ))}
-                </motion.div>
+                  Explorer l'agenda <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </button>
+
+                <button 
+                  onClick={() => scrollTo('contact')}
+                  className="h-12 bg-white/10 backdrop-blur-md border border-white/20 text-white px-10 text-[10px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white/20 flex items-center justify-center active:scale-95"
+                >
+                  Devenir partenaire
+                </button>
               </motion.div>
             </div>
+
+            {/* Scroll Indicator - 3 Arrows */}
+            <motion.div 
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="flex flex-col items-center gap-1 opacity-60 mt-12 md:mt-20"
+            >
+              {[...Array(3)].map((_, i) => (
+                <ChevronDown key={i} size={14} className="text-brand-yellow -mt-2 first:mt-0" />
+              ))}
+            </motion.div>
+          </div>
 
             {/* Social Links at bottom of Hero - Full Width */}
             <div className="absolute bottom-12 left-0 right-0 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 pt-8 border-t border-white/10 px-6">
@@ -322,7 +320,6 @@ export default function App() {
                 ))}
               </div>
             </div>
-          </div>
         </section>
 
         {/* Stats Grid - Bento Style */}
@@ -330,10 +327,10 @@ export default function App() {
           <div className="max-w-screen-2xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 border border-white/10">
               {[
-                { label: "Distinctions", value: "12", color: "text-brand-orange", icon: Theater },
-                { label: "Spectacles Live", value: "70+", color: "text-brand-green", icon: Users },
-                { label: "Années d'Activité", value: "20", color: "text-brand-yellow", icon: Library },
-                { label: "Communauté", value: "10K+", color: "text-white", icon: Instagram }
+                { label: "Danseurs", value: "+500", color: "text-brand-orange", icon: Users },
+                { label: "Pays Représentés", value: "+20", color: "text-brand-green", icon: MapPin },
+                { label: "Éditions Menées", value: "12", color: "text-brand-yellow", icon: Library },
+                { label: "Spectateurs", value: "10K+", color: "text-white", icon: Users }
               ].map((stat, i) => (
                 <motion.div 
                   key={i} 
@@ -379,7 +376,7 @@ export default function App() {
               </div>
               <div className="text-center">
                 <div className="text-4xl font-black text-brand-green">12</div>
-                <div className="text-[8px] font-black uppercase tracking-[0.3em] text-on-surface-muted">Éditions ASBI</div>
+                <div className="text-[8px] font-black uppercase tracking-[0.3em] text-on-surface-muted">Éditions ASB</div>
               </div>
             </div>
           </div>
@@ -396,6 +393,16 @@ export default function App() {
               <div className="space-y-6 max-w-2xl">
                 <h2 className="text-7xl md:text-[9rem] font-black uppercase tracking-tighter leading-[0.8] text-balance">Agenda</h2>
                 <p className="text-xl text-on-surface-muted italic">Retrouvez-nous lors de nos prochaines tournées mondiales et sessions d'élite.</p>
+                <div className="pt-4">
+                  <a 
+                    href="https://allstarbattle.dance" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-brand-orange hover:gap-6 transition-all"
+                  >
+                    Site Officiel All Star Battle International <ArrowUpRight size={14} />
+                  </a>
+                </div>
               </div>
               <button className="h-16 border-b-2 border-brand-orange text-xs font-black uppercase tracking-[0.4em] px-2 hover:text-brand-orange transition-all flex items-center gap-4">
                 View All dates <ArrowUpRight size={20} />
@@ -404,9 +411,9 @@ export default function App() {
 
             <div className="divide-y divide-on-surface/10 bg-white border border-on-surface/5 shadow-2xl">
               {[
-                { date: "24", month: "NOV", title: "Urban Genesis Tour", location: "Théâtre Principal, Paris FR", status: "Tickets", theme: "brand-orange", bg: "bg-accent-orange" },
-                { date: "02", month: "DÉC", title: "Elite Masterclass", location: "NLC Studio, Londres UK", status: "Booking", theme: "brand-green", bg: "bg-accent-green" },
-                { date: "15", month: "DÉC", title: "Archives: Vol. 04", location: "Global Digital Première", status: "Reserve", theme: "brand-yellow", bg: "bg-accent-yellow" }
+                { date: "12", month: "AVR", title: "ASB Qualifiers West", location: "Centre Culturel, Lomé TG", status: "Open Now", theme: "brand-orange", bg: "bg-brand-orange/5" },
+                { date: "02", month: "JUIL", title: "All Star Battle Int.", location: "Institut Français, Lomé TG", status: "Event", theme: "brand-green", bg: "bg-brand-green/5" },
+                { date: "15", month: "AOÛT", title: "Masterclass Elite", location: "NLC Academy, Lomé TG", status: "Booking", theme: "brand-yellow", bg: "bg-brand-yellow/5" }
               ].map((event, i) => (
                 <motion.div 
                   key={i} 
@@ -442,6 +449,39 @@ export default function App() {
           </div>
         </section>
 
+      {/* ── PARTNERS / TRUSTED BY ───────────────────────────── */}
+      <section className="py-12 bg-surface-alt border-y border-on-surface/5">
+        <div className="max-w-screen-2xl mx-auto px-6 md:px-12">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-on-surface/30 whitespace-nowrap">Collaborateurs & Partenaires</span>
+            <div className="flex flex-wrap justify-center md:justify-start items-center gap-10 md:gap-20 opacity-40 grayscale">
+               {['INSTITUT FRANÇAIS', 'MINISTÈRE DE LA CULTURE', 'CANAL+', 'ORANGE', 'MOOV AFRICA'].map(name => (
+                 <span key={name} className="text-lg md:text-xl font-black tracking-tighter whitespace-nowrap">{name}</span>
+               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── HIGHLIGHT VIDEO ───────────────────────────────── */}
+      <section className="py-24 md:py-32 bg-white px-6 md:px-12">
+        <div className="max-w-screen-2xl mx-auto">
+          <div className="flex justify-between items-end mb-12">
+            <SectionLabel>Highlights</SectionLabel>
+            <button className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-orange hover:translate-x-2 transition-transform">Voir sur YouTube &rarr;</button>
+          </div>
+          <div className="relative aspect-video bg-on-surface overflow-hidden group shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)]">
+            <iframe 
+              className="w-full h-full absolute inset-0"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+              title="All Star Battle Highlights"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
       {/* ── GALLERY / ARCHIVES (Editorial Style) ────────────── */}
       <section id="archives" className="py-24 md:py-32 px-6 md:px-12 bg-on-surface text-white">
         <div className="max-w-screen-2xl mx-auto">
@@ -461,6 +501,14 @@ export default function App() {
                <img src={IMAGES.gallery5} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="" />
              </div>
           </div>
+          <div className="mt-12 flex justify-center">
+            <button 
+              onClick={() => window.open('https://www.instagram.com/nolimitcrew_togo', '_blank')}
+              className="group flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-brand-orange transition-colors"
+            >
+              Voir plus <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            </button>
+          </div>
         </div>
       </section>
 
@@ -471,12 +519,33 @@ export default function App() {
             <div>
               <SectionLabel>Contact</SectionLabel>
               <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none mb-8">
-                Faites partie de<br />
-                <span className="text-brand-orange italic">l'aventure</span>
+                Devenir<br />
+                <span className="text-brand-orange italic">partenaire</span>
               </h2>
               <p className="text-on-surface-muted text-lg font-light max-w-sm">
-                Danseur, partenaire ou passionné — les portes de No Limit Crew sont ouvertes.
+                Rejoignez une plateforme internationale de danse et touchez une audience mondiale. Devenez un acteur majeur de la culture urbaine.
               </p>
+              
+              <div className="grid grid-cols-2 gap-4">
+                 {[
+                   { label: "Danseurs", val: "+500" },
+                   { label: "Pays", val: "+20" },
+                   { label: "Audience", val: "Int." },
+                   { label: "Impact", val: "Global" }
+                 ].map((stat, i) => (
+                   <div key={i} className="p-4 border border-on-surface/5 bg-surface-alt">
+                     <div className="text-2xl font-black text-brand-orange">{stat.val}</div>
+                     <div className="text-[8px] font-black uppercase tracking-widest text-on-surface-muted">{stat.label}</div>
+                   </div>
+                 ))}
+              </div>
+
+              <div className="pt-2">
+                 <button className="w-full sm:w-auto h-14 bg-brand-orange text-white px-10 text-[9px] font-black uppercase tracking-[0.4em] hover:bg-brand-orange/90 transition-all shadow-xl hover:shadow-brand-orange/30">
+                   Devenir partenaire officiel
+                 </button>
+                 <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface/30 mt-4">Dossier sponsor 2025 disponible</p>
+              </div>
             </div>
             <div className="space-y-6">
               {[
@@ -506,7 +575,20 @@ export default function App() {
       <footer className="bg-on-surface text-white py-20 px-6 md:px-12">
         <div className="max-w-screen-2xl mx-auto">
            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 pb-16 border-b border-white/10">
-              <img src={IMAGES.logo} className="h-16 w-auto" alt="Logo" />
+              <div className="space-y-6">
+                <img src={IMAGES.logo} className="h-24 w-auto" alt="Logo" />
+                <nav className="flex flex-wrap gap-x-8 gap-y-4">
+                  {NAV_ITEMS.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => scrollTo(item.id)}
+                      className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-brand-orange transition-colors"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </nav>
+              </div>
               <div className="flex gap-8">
                  {[Instagram, Youtube, Twitter, Facebook].map((Icon, i) => (
                    <a key={i} href="#" className="text-white/30 hover:text-brand-orange transition-colors">
@@ -536,7 +618,7 @@ export default function App() {
           >
             {[
               { icon: Theater, label: "Dates", id: "événements", color: "text-brand-orange" },
-              { icon: Users, label: "Crew", id: "lacompagnie", color: "text-brand-green" },
+              { icon: Users, label: "Crew", id: "about", color: "text-brand-green" },
               { icon: Dumbbell, label: "Booking", id: "contact", color: "text-brand-yellow" },
               { icon: Library, label: "Media", id: "archives", color: "text-brand-orange" }
             ].map((item, i) => (
@@ -545,8 +627,8 @@ export default function App() {
                 onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })}
                 className="flex flex-col items-center gap-1 group flex-1"
               >
-                <div className="p-2 transition-all">
-                  <item.icon size={22} className={`${item.color} group-hover:scale-125 transition-transform`} />
+                <div className="p-1 transition-all">
+                  <item.icon size={20} className={`${item.color} group-hover:scale-125 transition-transform`} />
                 </div>
                 <span className="text-[7px] font-black uppercase tracking-[0.2em]">{item.label}</span>
               </button>
@@ -566,7 +648,7 @@ export default function App() {
             className="fixed inset-0 z-[100] bg-on-surface text-white flex flex-col p-8 md:p-16"
           >
             <div className="flex justify-between items-center mb-16">
-              <img src={IMAGES.logo} alt="NLC" className="h-12 w-auto" />
+              <img src={IMAGES.logo} alt="NLC" className="h-16 w-auto" />
               <button 
                 onClick={() => setIsMenuOpen(false)}
                 className="w-12 h-12 border border-white/20 flex items-center justify-center hover:border-brand-orange"
