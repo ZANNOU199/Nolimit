@@ -3,33 +3,141 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Menu, 
-  Theater, 
-  Users, 
-  Dumbbell, 
-  Library, 
-  Instagram, 
-  Youtube, 
+import {
+  ArrowUpRight,
+  ChevronDown,
+  Instagram,
+  Youtube,
   Twitter,
   Facebook,
-  ArrowUpRight,
   MapPin,
-  ChevronDown,
+  X,
+  Menu,
+  Calendar,
+  Play,
+  Theater,
+  Users,
+  Dumbbell,
+  Library
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
 
 const IMAGES = {
-  logo: "https://i.ibb.co/gFPmjbyS/Copie-de-LOGO-NO-LIMIT-CREW-ASSOCIATION-removebg-preview.png",
-  hero: "https://i.ibb.co/Rps321Pt/78-A0328-resultat-resultat-resultat.webp",
-  elena: "https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=1974&auto=format&fit=crop",
-  marcus: "https://images.unsplash.com/photo-1502444330042-d1a1ddf9bb5b?q=80&w=2073&auto=format&fit=crop",
-  archive1: "https://images.unsplash.com/photo-1535525153412-5a42439a210d?q=80&w=2070&auto=format&fit=crop",
-  archive2: "https://images.unsplash.com/photo-1508807526345-15e9b5f4eaff?q=80&w=1974&auto=format&fit=crop",
-  archive3: "https://images.unsplash.com/photo-1550026399-392e69575ee2?q=80&w=2070&auto=format&fit=crop",
-  archive4: "https://images.unsplash.com/photo-1516475429286-465d815a0df7?q=80&w=1974&auto=format&fit=crop",
+  logo: 'https://i.ibb.co/gFPmjbyS/Copie-de-LOGO-NO-LIMIT-CREW-ASSOCIATION-removebg-preview.png',
+  hero: 'https://i.ibb.co/Rps321Pt/78-A0328-resultat-resultat-resultat.webp',
+  gallery1: 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?q=80&w=1400&auto=format&fit=crop',
+  gallery2: 'https://images.unsplash.com/photo-1508807526345-15e9b5f4eaff?q=80&w=1400&auto=format&fit=crop',
+  gallery3: 'https://images.unsplash.com/photo-1550026399-392e69575ee2?q=80&w=1400&auto=format&fit=crop',
+  gallery4: 'https://images.unsplash.com/photo-1516475429286-465d815a0df7?q=80&w=1400&auto=format&fit=crop',
+  gallery5: 'https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=1400&auto=format&fit=crop',
 };
+
+const NAV_ITEMS = [
+  { label: 'À propos', id: 'about' },
+  { label: 'Festival', id: 'festival' },
+  { label: 'Événements', id: 'événements' },
+  { label: 'Galerie', id: 'archives' },
+  { label: 'Contact', id: 'contact' },
+];
+
+const EVENTS = [
+  {
+    date: '18',
+    month: 'Juil',
+    year: '2025',
+    title: 'All Star Battle International',
+    sub: '12ème Édition · Ouverture officielle',
+    location: 'Institut Français du Togo, Lomé',
+    status: 'Passé',
+    accent: 'brand-orange',
+  },
+  {
+    date: '25',
+    month: 'Juil',
+    year: '2025',
+    title: 'En attendant James B.',
+    sub: 'Spectacle de clôture · Scène Jimi Hope',
+    location: 'IFT · Lomé, Togo',
+    status: 'Passé',
+    accent: 'brand-green',
+  },
+  {
+    date: 'TBD',
+    month: '2026',
+    year: '',
+    title: 'All Star Battle International',
+    sub: '13ème Édition · Lomé',
+    location: 'Lomé, Togo',
+    status: 'À venir',
+    accent: 'brand-yellow',
+  },
+];
+
+/* ─────────────────────────────────────────────────────────
+   COMPONENTS
+   ───────────────────────────────────────────────────────── */
+
+function scrollTo(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function CustomCursor() {
+  const [pos, setPos] = useState({ x: -100, y: -100 });
+  const [hovering, setHovering] = useState(false);
+  const [label, setLabel] = useState('');
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
+    const enter = (e: MouseEvent) => {
+      const el = (e.target as HTMLElement).closest('[data-cursor]') as HTMLElement | null;
+      if (el) { setHovering(true); setLabel(el.dataset.cursor || ''); }
+    };
+    const leave = () => { setHovering(false); setLabel(''); };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseenter', enter, true);
+    window.addEventListener('mouseleave', leave, true);
+    return () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseenter', enter, true);
+      window.removeEventListener('mouseleave', leave, true);
+    };
+  }, []);
+
+  return (
+    <motion.div
+      className="fixed top-0 left-0 z-[200] pointer-events-none hidden md:flex items-center justify-center text-white"
+      animate={{
+        x: pos.x - (hovering ? 40 : 8),
+        y: pos.y - (hovering ? 40 : 8),
+        width: hovering ? 80 : 16,
+        height: hovering ? 80 : 16,
+        borderRadius: hovering ? '4px' : '50%',
+        backgroundColor: hovering ? '#E8511A' : 'rgba(232,81,26,0.6)',
+      }}
+      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+    >
+      {hovering && label && (
+        <span className="text-[7px] font-black uppercase tracking-[0.2em] text-center leading-tight">{label}</span>
+      )}
+    </motion.div>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      className="flex items-center gap-4 mb-6"
+    >
+      <span className="w-8 h-px bg-brand-orange" />
+      <span className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-orange">{children}</span>
+    </motion.div>
+  );
+}
+
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,34 +167,50 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-surface selection:bg-brand-orange selection:text-white">
-      {/* Top Bar */}
-      <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${scrollY > 50 ? 'h-16 bg-surface/90 glass-light' : 'h-24 bg-transparent'}`}
-      >
-        <div className="max-w-screen-2xl mx-auto h-full px-6 md:px-12 flex items-center justify-between">
-          <div className="h-full py-4 transition-all duration-500">
-            <img 
-              src={IMAGES.logo} 
-              alt="No Limit Crew Logo" 
-              className={`h-full w-auto object-contain transition-all duration-700 transform-gpu ${scrollY > 50 ? 'scale-90 opacity-100' : 'scale-100'}`}
-              style={{ 
-                imageRendering: 'auto'
-              }}
-              referrerPolicy="no-referrer"
-            />
-          </div>
+    <div className="min-h-screen bg-surface text-on-surface selection:bg-brand-orange selection:text-white font-sans overflow-x-hidden">
+      <CustomCursor />
 
-          <button 
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="group flex items-center gap-4 p-2"
-          >
-            <div className="flex flex-col gap-1.5">
-              <div className={`w-8 h-1 bg-on-surface transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2.5' : ''}`} />
-              <div className={`w-8 h-1 bg-on-surface transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-              <div className={`w-6 h-1 bg-on-surface self-end transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2.5 -translate-x-1 w-8' : ''}`} />
-            </div>
-          </button>
+      {/* ── NAV (Editorial Version) ────────────────────────── */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrollY > 80 ? 'bg-white/95 backdrop-blur-xl shadow-sm' : 'bg-transparent'
+        }`}
+      >
+        <div className="max-w-screen-2xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+          <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+            <img src={IMAGES.logo} alt="NLC" className="h-12 w-auto object-contain" referrerPolicy="no-referrer" />
+          </a>
+
+          <nav className="hidden md:flex items-center gap-10">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollTo(item.id)}
+                className="text-[10px] font-black uppercase tracking-[0.4em] text-on-surface-muted hover:text-brand-orange transition-colors"
+                style={{ color: scrollY < 80 ? 'white' : undefined }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-6">
+            <button
+              onClick={() => scrollTo('contact')}
+              className="hidden md:flex items-center gap-3 h-10 px-6 bg-brand-orange text-white text-[9px] font-black uppercase tracking-[0.4em] hover:bg-brand-orange/90 transition-colors active:scale-95"
+            >
+              Rejoindre <ArrowUpRight size={13} />
+            </button>
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="flex flex-col gap-[5px] p-2 group"
+              aria-label="Menu"
+            >
+              <span className={`block w-7 h-[2px] transition-all group-hover:bg-brand-orange ${scrollY < 80 ? 'bg-white' : 'bg-on-surface'}`} />
+              <span className={`block w-5 h-[2px] self-end transition-all group-hover:w-7 group-hover:bg-brand-orange ${scrollY < 80 ? 'bg-white' : 'bg-on-surface'}`} />
+              <span className={`block w-7 h-[2px] transition-all group-hover:bg-brand-orange ${scrollY < 80 ? 'bg-white' : 'bg-on-surface'}`} />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -126,19 +250,29 @@ export default function App() {
           <div className={`absolute inset-0 bg-gradient-to-tr from-on-surface via-transparent to-transparent transition-opacity duration-1000 ${scrollY > 50 || isHeroActive ? 'opacity-40' : 'opacity-80'}`} />
 
           <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-center pb-8 sm:pb-16 text-center">
-            <div className="space-y-10 w-full mt-48 md:mt-64">
+            <div className="space-y-8 w-full mt-48 md:mt-64">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.2 }}
+              >
+                <span className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-yellow mb-4 block">Togo — Depuis 2005</span>
+              </motion.div>
+
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 1 }}
                 className="space-y-6 w-full"
               >
-                <div className={`overflow-hidden bg-brand-yellow/10 backdrop-blur-[2px] py-3 border-y border-white/10 w-full rotate-[-1deg] transition-all duration-1000 ${scrollY > 50 || isHeroActive ? 'bg-black/20' : ''}`}>
+                <div className={`overflow-hidden bg-brand-yellow/10 backdrop-blur-[2px] py-2 border-y border-white/10 w-full rotate-[-1deg] transition-all duration-1000 ${scrollY > 50 || isHeroActive ? 'bg-black/20' : ''}`}>
                   <div className="flex whitespace-nowrap animate-marquee">
                     {[...Array(6)].map((_, i) => (
-                      <span key={i} className="text-white text-[clamp(1.2rem,4vw,2.5rem)] font-bold uppercase tracking-tighter mx-10 flex items-center gap-10">
-                        No Limit Crew <span className="w-3 h-3 md:w-4 md:h-4 bg-brand-orange rotate-45 shrink-0 shadow-[0_0_15px_rgba(232,81,26,0.5)]" />
-                        No Limit Association <span className="w-3 h-3 md:w-4 md:h-4 bg-brand-green rotate-45 shrink-0 shadow-[0_0_15px_rgba(30,158,74,0.5)]" />
+                      <span key={i} className="text-white text-[clamp(1rem,3.5vw,2.2rem)] font-bold uppercase tracking-tighter mx-10 flex items-center gap-8">
+                        <span>No Limit <span className="text-brand-orange italic">Crew</span></span>
+                        <span className="w-2 h-2 md:w-3 md:h-3 bg-white/40 rotate-45 shrink-0" />
+                        <span>No Limit <span className="text-brand-green italic">Association</span></span>
+                        <span className="w-2 h-2 md:w-3 md:h-3 bg-white/40 rotate-45 shrink-0" />
                       </span>
                     ))}
                   </div>
@@ -154,12 +288,12 @@ export default function App() {
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <button 
                     onClick={() => document.getElementById('événements')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="group relative h-12 bg-brand-orange text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange/90 flex items-center justify-center gap-4 active:scale-95 shadow-[0_15px_30px_rgba(232,81,26,0.3)]"
+                    className="group relative h-10 bg-brand-orange text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-brand-orange/90 flex items-center justify-center gap-4 active:scale-95 shadow-[0_15px_30px_rgba(232,81,26,0.3)]"
                   >
                     Nos événements <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </button>
 
-                  <button className="h-12 bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white hover:text-on-surface flex items-center justify-center active:scale-95">
+                  <button className="h-10 bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 text-[9px] font-black uppercase tracking-[0.4em] transition-all hover:bg-white hover:text-on-surface flex items-center justify-center active:scale-95">
                     Devenir partenaire
                   </button>
                 </div>
@@ -192,14 +326,14 @@ export default function App() {
         </section>
 
         {/* Stats Grid - Bento Style */}
-        <section className="bg-on-surface py-24 md:py-48 px-6 overflow-hidden">
+        <section className="bg-on-surface py-10 md:py-12 px-6 overflow-hidden">
           <div className="max-w-screen-2xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 border border-white/10">
               {[
                 { label: "Distinctions", value: "12", color: "text-brand-orange", icon: Theater },
-                { label: "Spectacles Live", value: "500+", color: "text-brand-green", icon: Users },
-                { label: "Années d'Activité", value: "14", color: "text-brand-yellow", icon: Library },
-                { label: "Communauté", value: "50K", color: "text-white", icon: Instagram }
+                { label: "Spectacles Live", value: "70+", color: "text-brand-green", icon: Users },
+                { label: "Années d'Activité", value: "20", color: "text-brand-yellow", icon: Library },
+                { label: "Communauté", value: "10K+", color: "text-white", icon: Instagram }
               ].map((stat, i) => (
                 <motion.div 
                   key={i} 
@@ -207,15 +341,15 @@ export default function App() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.8 }}
-                  className="relative p-12 overflow-hidden group bg-on-surface hover:bg-white/[0.03] transition-colors min-h-[350px] flex flex-col justify-between"
+                  className="relative p-6 overflow-hidden group bg-on-surface hover:bg-white/[0.03] transition-colors min-h-[160px] flex flex-col justify-between"
                 >
-                  <stat.icon className="absolute -top-6 -right-6 w-32 h-32 opacity-5 text-white group-hover:scale-125 transition-transform duration-1000" />
-                  <div className={`text-7xl lg:text-9xl font-black ${stat.color} leading-none tracking-tighter group-hover:scale-105 transition-transform origin-left duration-700`}>
+                  <stat.icon className="absolute -top-4 -right-4 w-16 h-16 opacity-5 text-white group-hover:scale-125 transition-transform duration-1000" />
+                  <div className={`text-4xl lg:text-5xl font-black ${stat.color} leading-none tracking-tighter group-hover:scale-105 transition-transform origin-left duration-700`}>
                     {stat.value}
                   </div>
-                  <div className="space-y-4">
-                    <div className="h-1 w-12 bg-white/10" />
-                    <div className="text-[11px] font-black tracking-[0.4em] uppercase text-white opacity-40 group-hover:opacity-100 transition-opacity">
+                  <div className="space-y-3">
+                    <div className="h-1 w-8 bg-white/10" />
+                    <div className="text-[9px] font-black tracking-[0.4em] uppercase text-white opacity-40 group-hover:opacity-100 transition-opacity">
                       {stat.label}
                     </div>
                   </div>
@@ -225,79 +359,35 @@ export default function App() {
           </div>
         </section>
 
-        {/* The Crew / La Compagnie */}
-        <section id="lacompagnie" className="py-24 md:py-48 px-6 bg-surface text-on-surface relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-green/5 blur-[150px] -translate-y-1/2 translate-x-1/2" />
-          <div className="max-w-screen-2xl mx-auto relative z-10">
-            <div className="grid lg:grid-cols-12 gap-20 items-start">
-              <div className="lg:col-span-5 space-y-10 lg:sticky lg:top-32">
-                <div className="space-y-6">
-                  <h2 className="text-7xl md:text-[9rem] font-black uppercase tracking-tighter leading-[0.8] text-balance">
-                    La <span className="text-brand-green block italic">Compagnie</span>
-                  </h2>
-                  <p className="text-xl md:text-2xl text-on-surface-muted font-light leading-relaxed max-w-xl">
-                    Spécialistes du mouvement d'élite dédiés à la préservation et à l'évolution de l'art urbain contemporain.
-                  </p>
-                </div>
-                
-                <div className="flex flex-wrap gap-8 items-center pt-10 border-t border-on-surface/10">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-green">Fondée EN</span>
-                    <div className="text-2xl font-black">2009</div>
-                  </div>
-                  <div className="w-px h-10 bg-on-surface/10" />
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-orange">SIÈGE</span>
-                    <div className="text-2xl font-black">PARIS</div>
-                  </div>
-                </div>
+      {/* ── ABOUT SECTION ─────────────────────────────────── */}
+      <section id="about" className="py-24 md:py-32 px-6 md:px-12 bg-white">
+        <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <SectionLabel>L'Association</SectionLabel>
+            <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none mb-8">
+              Pionniers du<br />
+              <span className="text-brand-orange italic">Breaking</span><br />
+              en Afrique
+            </h2>
+            <p className="text-on-surface-muted text-lg font-light leading-relaxed mb-8">
+              Depuis 2005, No Limit Crew œuvre pour la promotion et la professionnalisation des danses urbaines au Togo et à l'international.
+            </p>
+            <div className="flex gap-10">
+              <div className="text-center">
+                <div className="text-4xl font-black text-brand-orange">20+</div>
+                <div className="text-[8px] font-black uppercase tracking-[0.3em] text-on-surface-muted">Ans d'impact</div>
               </div>
-
-              <div className="lg:col-span-7 space-y-32">
-                {[
-                  { name: "Elena Rossi", role: "Directrice Artistique", img: IMAGES.elena, bio: "Pionnière du mouvement fluide fusionnant breakdance et contemporain.", accent: "brand-green" },
-                  { name: "Marcus Vane", role: "Directeur Technique", img: IMAGES.marcus, bio: "Expert en acrobaties de haute précision et scénographie dynamique.", accent: "brand-yellow" }
-                ].map((member, i) => (
-                  <motion.div 
-                    key={i}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 1 }}
-                    className="group"
-                  >
-                    <div className="grid md:grid-cols-12 gap-12 items-center">
-                      <div className="md:col-span-7 order-2 md:order-1">
-                        <div className="relative aspect-[4/5] overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-1000 border-2 border-on-surface/5">
-                           <div className={`absolute inset-0 bg-brand-${member.accent}/10 opacity-0 group-hover:opacity-100 transition-opacity z-10`} />
-                           <img 
-                            src={member.img} 
-                            alt={member.name} 
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
-                            referrerPolicy="no-referrer"
-                          />
-                        </div>
-                      </div>
-                      <div className="md:col-span-5 order-1 md:order-2 space-y-8">
-                        <div className="space-y-3">
-                          <span className={`text-[11px] font-black uppercase tracking-[0.5em] text-brand-${member.accent}`}>{member.role}</span>
-                          <h3 className="text-5xl font-black uppercase leading-tight tracking-tighter">{member.name}</h3>
-                        </div>
-                        <p className="text-lg text-on-surface-muted leading-relaxed font-light">
-                          {member.bio}
-                        </p>
-                        <button className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] group/btn">
-                          <span className="w-12 h-px bg-on-surface/20 group-hover/btn:w-20 group-hover/btn:bg-brand-orange transition-all duration-500" />
-                          View Portfolio
-                        </button>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+              <div className="text-center">
+                <div className="text-4xl font-black text-brand-green">12</div>
+                <div className="text-[8px] font-black uppercase tracking-[0.3em] text-on-surface-muted">Éditions ASBI</div>
               </div>
             </div>
           </div>
-        </section>
+          <div className="aspect-square bg-on-surface/5 relative overflow-hidden">
+             <img src={IMAGES.gallery1} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="About" />
+          </div>
+        </div>
+      </section>
 
         {/* Events Section */}
         <section id="événements" className="bg-surface py-24 md:py-48 px-6 border-y border-on-surface/5">
@@ -352,130 +442,86 @@ export default function App() {
           </div>
         </section>
 
-        {/* Media Gallery / Archives */}
-        <section id="archives" className="py-24 md:py-48 bg-surface-alt text-on-surface overflow-hidden">
-          <div className="max-w-screen-2xl mx-auto px-6 space-y-24">
-            <div className="flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-10">
-              <h2 className="text-7xl md:text-[10rem] font-black uppercase tracking-tighter leading-[0.8]">Archives</h2>
-              <div className="max-w-md space-y-6">
-                <p className="text-lg text-on-surface-muted italic font-light">
-                  "L'art est un cri vers la liberté, un saut dans l'infini."
-                </p>
-                <div className="h-px w-full bg-on-surface/10" />
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <motion.div 
-                whileHover={{ scale: 0.98 }}
-                className="md:col-span-2 md:row-span-2 relative aspect-[16/9] md:aspect-auto overflow-hidden group shadow-2xl border-2 border-on-surface/5"
-              >
-                <img src={IMAGES.archive3} alt="Performance" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-brand-orange/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.div>
-              <div className="aspect-square relative overflow-hidden group border-2 border-on-surface/5">
-                <img src={IMAGES.archive1} alt="Répétition" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" referrerPolicy="no-referrer" />
-              </div>
-              <div className="aspect-square relative overflow-hidden group border-2 border-on-surface/5">
-                <img src={IMAGES.archive2} alt="Backstage" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" referrerPolicy="no-referrer" />
-              </div>
-              <div className="md:col-span-3 aspect-[21/9] relative overflow-hidden group border-2 border-on-surface/5">
-                <img src={IMAGES.archive4} alt="Street" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" referrerPolicy="no-referrer" />
-              </div>
-            </div>
-
-            <button className="w-full h-24 border border-on-surface/10 font-black uppercase tracking-[0.5em] text-[10px] hover:bg-on-surface hover:text-white transition-all flex items-center justify-center gap-6 group shadow-lg">
-              Full Media Archive <ArrowUpRight className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform" />
-            </button>
+      {/* ── GALLERY / ARCHIVES (Editorial Style) ────────────── */}
+      <section id="archives" className="py-24 md:py-32 px-6 md:px-12 bg-on-surface text-white">
+        <div className="max-w-screen-2xl mx-auto">
+          <SectionLabel>Galerie & Archives</SectionLabel>
+          <div className="grid grid-cols-12 grid-rows-2 gap-3 h-[70vw] max-h-[700px]">
+             <div className="col-span-12 md:col-span-7 row-span-2 relative overflow-hidden group">
+               <img src={IMAGES.gallery3} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" alt="" />
+               <div className="absolute inset-0 bg-brand-orange/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+             </div>
+             <div className="col-span-12 md:col-span-5 row-span-1 relative overflow-hidden">
+               <img src={IMAGES.gallery4} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="" />
+             </div>
+             <div className="col-span-6 md:col-span-2 row-span-1 relative overflow-hidden">
+               <img src={IMAGES.gallery2} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="" />
+             </div>
+             <div className="col-span-6 md:col-span-3 row-span-1 relative overflow-hidden">
+               <img src={IMAGES.gallery5} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="" />
+             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Contact Section */}
-        <section id="contact" className="py-24 md:py-48 px-6 bg-surface">
-          <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-32">
-            <div className="space-y-12">
-              <div className="space-y-6">
-                <h2 className="text-7xl md:text-[9rem] font-black uppercase tracking-tighter leading-[0.8] text-balance">Elite <span className="text-brand-orange block">Booking</span></h2>
-                <p className="text-xl text-on-surface-muted italic font-medium leading-relaxed max-w-md">
-                  Inscrivez votre événement dans l'histoire de la culture urbaine. Contactez notre direction technique.
-                </p>
-              </div>
-
-              <div className="space-y-8">
-                <div className="flex flex-col gap-4 text-xs font-black uppercase tracking-[0.4em]">
-                  {["Paris, France", "@nolimitcrew_official", "booking@nolimitcrew.pro"].map((item, i) => (
-                    <motion.div key={i} whileHover={{ x: 10 }} className="flex items-center gap-6 cursor-pointer group">
-                      <span className={`w-3 h-3 rotate-45 ${i === 0 ? 'bg-brand-orange' : i === 1 ? 'bg-brand-green' : 'bg-brand-yellow'}`} />
-                      {item}
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+      {/* ── CONTACT (New Editorial Version) ────────────────── */}
+      <section id="contact" className="py-24 md:py-32 px-6 md:px-12 bg-white">
+        <div className="max-w-screen-2xl mx-auto grid lg:grid-cols-2 gap-20">
+          <div className="space-y-12">
+            <div>
+              <SectionLabel>Contact</SectionLabel>
+              <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none mb-8">
+                Faites partie de<br />
+                <span className="text-brand-orange italic">l'aventure</span>
+              </h2>
+              <p className="text-on-surface-muted text-lg font-light max-w-sm">
+                Danseur, partenaire ou passionné — les portes de No Limit Crew sont ouvertes.
+              </p>
             </div>
-            
-            <form className="space-y-12 bg-white p-8 md:p-16 border border-on-surface/5 shadow-2xl" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid md:grid-cols-2 gap-12">
-                {[
-                  { label: "Nom Complet", placeholder: "Jean Dupont" },
-                  { label: "Organisation", placeholder: "Agence Artistique" }
-                ].map((field, i) => (
-                  <div key={i} className="space-y-4">
-                    <label className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">{field.label}</label>
-                    <input className="w-full bg-transparent border-b-2 border-on-surface/10 py-4 outline-none focus:border-brand-orange transition-colors text-xl font-bold" placeholder={field.placeholder} />
-                  </div>
-                ))}
-              </div>
-              <div className="space-y-4">
-                <label className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Message / Projet Details</label>
-                <textarea className="w-full bg-transparent border-b-2 border-on-surface/10 py-4 outline-none focus:border-brand-orange transition-colors text-xl font-bold min-h-[150px] resize-none" placeholder="En quoi pouvons-nous vous aider ?" />
-              </div>
-              <button className="w-full h-20 bg-on-surface text-white font-black uppercase tracking-[0.4em] text-[10px] shadow-[10px_10px_0px_#E8511A] hover:translate-x-2 hover:translate-y-2 hover:shadow-none transition-all duration-300">
-                Send Inquiry
-              </button>
-            </form>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-on-surface text-white py-32 px-6 relative overflow-hidden border-t border-on-surface/5">
-        <div className="max-w-screen-2xl mx-auto space-y-32">
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-20">
-            <div className="space-y-10 text-center md:text-left">
-              <img 
-                src={IMAGES.logo} 
-                alt="NLC Logo" 
-                className="h-20 w-auto mx-auto md:mx-0 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]" 
-                style={{ imageRendering: 'auto' }}
-                referrerPolicy="no-referrer" 
-              />
-              <p className="text-xs uppercase tracking-[0.6em] text-white/30 font-black">Energy. Elite. Evolution.</p>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-32">
+            <div className="space-y-6">
               {[
-                { title: "Network", links: ["Instagram", "Youtube", "Twitter", "Facebook"] },
-                { title: "Work", links: ["Events", "Gallery", "Company", "Partner"] }
-              ].map((group, i) => (
-                <div key={i} className="space-y-8">
-                  <h5 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">{group.title}</h5>
-                  <div className="flex flex-col gap-4 text-[10px] font-black uppercase tracking-[0.2em]">
-                    {group.links.map((link, j) => (
-                      <a key={j} href="#" className="hover:text-brand-orange transition-colors">{link}</a>
-                    ))}
+                { icon: MapPin, label: 'Adresse', val: "Lomé, Togo — Afrique de l'Ouest" },
+                { icon: Instagram, label: 'Instagram', val: '@nolimitcrew_togo' },
+                { icon: Twitter, label: 'X / Twitter', val: '@NolimitTogo' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-5">
+                  <div className="w-10 h-10 border border-on-surface/10 flex items-center justify-center">
+                    <item.icon size={14} className="text-brand-orange" />
+                  </div>
+                  <div>
+                    <div className="text-[8px] font-black uppercase tracking-[0.3em] text-on-surface-muted">{item.label}</div>
+                    <div className="text-sm font-bold">{item.val}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          
-          <div className="flex flex-col md:flex-row justify-between items-center gap-10 opacity-20 border-t border-white/10 pt-10">
-            <p className="text-[9px] font-black uppercase tracking-[0.5em]">© 2024 No Limit Crew Association</p>
-            <div className="flex gap-10 text-[9px] font-black uppercase tracking-[0.4em]">
-              <a href="#">Privacy</a>
-              <a href="#">Terms</a>
-              <a href="#">Press Kit</a>
-            </div>
-          </div>
+
+          <ContactForm />
+        </div>
+      </section>
+    </main>
+
+      {/* ── FOOTER (New Editorial Version) ─────────────────── */}
+      <footer className="bg-on-surface text-white py-20 px-6 md:px-12">
+        <div className="max-w-screen-2xl mx-auto">
+           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10 pb-16 border-b border-white/10">
+              <img src={IMAGES.logo} className="h-16 w-auto" alt="Logo" />
+              <div className="flex gap-8">
+                 {[Instagram, Youtube, Twitter, Facebook].map((Icon, i) => (
+                   <a key={i} href="#" className="text-white/30 hover:text-brand-orange transition-colors">
+                     <Icon size={20} />
+                   </a>
+                 ))}
+              </div>
+           </div>
+           <div className="pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20">© 2025 Association No Limit Crew · Lomé, Togo</span>
+              <div className="flex gap-8 text-[9px] font-black uppercase tracking-[0.4em] text-white/20">
+                 <a href="#" className="hover:text-white/50 transition-colors">Mentions légales</a>
+                 <a href="#" className="hover:text-white/50 transition-colors">Confidentialité</a>
+              </div>
+           </div>
         </div>
       </footer>
 
@@ -509,75 +555,79 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Overlay Menu */}
+      {/* ── OVERLAY MENU ───────────────────────────────────── */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-surface-dark text-white p-12 flex flex-col justify-between overflow-hidden"
+          <motion.div
+            initial={{ clipPath: 'inset(0 0 100% 0)' }}
+            animate={{ clipPath: 'inset(0 0 0% 0)' }}
+            exit={{ clipPath: 'inset(0 0 100% 0)' }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[100] bg-on-surface text-white flex flex-col p-8 md:p-16"
           >
-            {/* Artistic Background Elements */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] pointer-events-none overflow-hidden opacity-10">
-              <div className="text-[40rem] font-black uppercase tracking-tighter leading-none select-none text-brand-orange/20 animate-marquee-fast whitespace-nowrap">
-                NO LIMIT NO LIMIT NO LIMIT NO LIMIT
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center relative z-10">
-              <span className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-orange">Navigation Elite</span>
-              <button onClick={() => setIsMenuOpen(false)} className="group p-4">
-                <div className="relative w-8 h-8 flex items-center justify-center">
-                  <div className="absolute w-8 h-1 bg-white rotate-45 group-hover:bg-brand-orange transition-colors" />
-                  <div className="absolute w-8 h-1 bg-white -rotate-45 group-hover:bg-brand-orange transition-colors" />
-                </div>
+            <div className="flex justify-between items-center mb-16">
+              <img src={IMAGES.logo} alt="NLC" className="h-12 w-auto" />
+              <button 
+                onClick={() => setIsMenuOpen(false)}
+                className="w-12 h-12 border border-white/20 flex items-center justify-center hover:border-brand-orange"
+              >
+                <X size={18} />
               </button>
             </div>
-
-            <div className="space-y-4 relative z-10">
-              {[
-                { name: 'Accueil', id: 'accueil', accent: 'brand-orange' },
-                { name: 'La Compagnie', id: 'lacompagnie', accent: 'brand-green' },
-                { name: 'Agenda', id: 'événements', accent: 'brand-orange' },
-                { name: 'Archives', id: 'archives', accent: 'brand-yellow' },
-                { name: 'Contact', id: 'contact', accent: 'brand-orange' }
-              ].map((item, i) => (
-                <motion.button
-                  key={i}
-                  initial={{ x: -100, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: i * 0.1 }}
-                  onClick={() => {
-                    if (item.id === 'accueil') window.scrollTo({ top: 0, behavior: 'smooth' });
-                    else document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
-                    setIsMenuOpen(false);
-                  }}
-                  className="group block text-left"
+            <nav className="flex-1 flex flex-col justify-center gap-2">
+              {NAV_ITEMS.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => { scrollTo(item.id); setIsMenuOpen(false); }}
+                  className="group text-left flex items-center justify-between py-4 border-b border-white/5 hover:border-brand-orange transition-colors"
                 >
-                  <div className="flex items-center gap-6">
-                    <span className="text-4xl md:text-8xl font-black uppercase tracking-tighter group-hover:translate-x-6 transition-transform duration-500 flex items-center">
-                      {item.name}
-                      <ArrowUpRight size={48} className="opacity-0 group-hover:opacity-100 group-hover:text-brand-orange transition-all ml-4" />
-                    </span>
-                  </div>
-                </motion.button>
+                  <span className="text-4xl md:text-7xl font-black uppercase tracking-tighter group-hover:text-brand-orange transition-colors">
+                    {item.label}
+                  </span>
+                  <ArrowUpRight size={24} className="opacity-0 group-hover:opacity-100" />
+                </button>
               ))}
-            </div>
-
-            <div className="flex flex-col md:flex-row justify-between items-end md:items-center relative z-10 gap-10">
+            </nav>
+            <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-10">
               <div className="flex gap-10">
                 {[Instagram, Youtube].map((Icon, i) => (
                   <Icon key={i} size={28} className="hover:text-brand-orange hover:scale-125 transition-all cursor-pointer" />
                 ))}
-              </div>
-              <div className="text-[10px] font-black uppercase tracking-[0.5em] text-white/30 hidden md:block">
-                Artistic Mastery Since 2009
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function ContactForm() {
+  const [sent, setSent] = useState(false);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSent(true);
+  };
+
+  if (sent) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center p-12 border border-on-surface/10 bg-surface-alt text-center">
+        <div className="text-4xl text-brand-green mb-4">✓</div>
+        <h3 className="text-2xl font-black mb-2">Message envoyé !</h3>
+        <p className="text-on-surface-muted font-light">Nous vous répondrons très bientôt.</p>
+        <button onClick={() => setSent(false)} className="mt-4 text-[10px] font-black uppercase tracking-widest text-brand-orange">Envoyer un autre</button>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6 p-8 bg-surface-alt border border-on-surface/5">
+      <div className="grid md:grid-cols-2 gap-6">
+        <input placeholder="Nom" required className="bg-transparent border-b border-on-surface/20 py-3 outline-none focus:border-brand-orange transition-colors" />
+        <input placeholder="Email" type="email" required className="bg-transparent border-b border-on-surface/20 py-3 outline-none focus:border-brand-orange transition-colors" />
+      </div>
+      <textarea placeholder="Message" rows={4} className="w-full bg-transparent border-b border-on-surface/20 py-3 outline-none focus:border-brand-orange transition-colors resize-none" />
+      <button className="w-full h-14 bg-on-surface text-white font-black uppercase tracking-widest text-xs hover:bg-brand-orange transition-colors">Envoyer</button>
+    </form>
   );
 }
