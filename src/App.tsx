@@ -291,7 +291,7 @@ export default function App() {
                       <span key={i} className="text-white text-[clamp(1.2rem,3vw,2rem)] font-bold uppercase tracking-tighter mx-10 flex items-center gap-8">
                         <span>All Star Battle <span className="text-brand-orange italic">International</span></span>
                         <span className="w-2 h-2 md:w-3 md:h-3 bg-white/30 rotate-45 shrink-0" />
-                        <span className="opacity-80">No Limit Crew <span className="italic">Association</span></span>
+                        <span className="opacity-80">No Limit Crew <span className="italic text-brand-green">Association</span></span>
                         <span className="w-2 h-2 md:w-3 md:h-3 bg-white/30 rotate-45 shrink-0" />
                       </span>
                     ))}
