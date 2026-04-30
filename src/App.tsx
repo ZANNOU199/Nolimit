@@ -607,35 +607,8 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Mobile Nav */}
-      <AnimatePresence>
-        {scrollY > 100 && (
-          <motion.nav 
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="md:hidden fixed bottom-6 left-6 right-6 h-20 bg-surface/90 glass-light z-[90] rounded-none flex items-center justify-around px-2 shadow-2xl"
-          >
-            {[
-              { icon: Theater, label: "Dates", id: "événements", color: "text-brand-orange" },
-              { icon: Users, label: "Crew", id: "about", color: "text-brand-green" },
-              { icon: Dumbbell, label: "Booking", id: "contact", color: "text-brand-yellow" },
-              { icon: Library, label: "Media", id: "archives", color: "text-brand-orange" }
-            ].map((item, i) => (
-              <button 
-                key={i}
-                onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })}
-                className="flex flex-col items-center gap-1 group flex-1"
-              >
-                <div className="p-1 transition-all">
-                  <item.icon size={20} className={`${item.color} group-hover:scale-125 transition-transform`} />
-                </div>
-                <span className="text-[7px] font-black uppercase tracking-[0.2em]">{item.label}</span>
-              </button>
-            ))}
-          </motion.nav>
-        )}
-      </AnimatePresence>
+      {/* Mobile Nav removed as requested */}
+
 
       {/* ── OVERLAY MENU ───────────────────────────────────── */}
       <AnimatePresence>
